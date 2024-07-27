@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import { useGetPatientByIdQuery } from "../store/api/patientApi";
 import moment from "moment";
 import AddVitalsModal from "../components/modals/AddVitalsModal";
-import VitalSignsChart from "../components/charts/VitalSignsChart";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -271,17 +270,6 @@ export default function PatientDetails() {
               {/* </div> */}
             </div>
           </div>
-          {activeTab === "table" ? (
-            <VitalSignsTable
-              startDate={dateRange[0].startDate}
-              endDate={dateRange[0].endDate}
-            />
-          ) : (
-            <VitalSignsChart
-              startDate={dateRange[0].startDate}
-              endDate={dateRange[0].endDate}
-            />
-          )}
         </div>
         <div className="flex-col w-1/4">
           <div className="flex-col w-full bg-white rounded-md justify-between items-center p-6">

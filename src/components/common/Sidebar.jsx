@@ -66,14 +66,14 @@ function SidebarComp() {
           <div className="sidebar-link">
             <MenuItem
               className={
-                selectedMenuItem === "admitted" ? "selected-menu-item" : ""
+                selectedMenuItem === "newOrder" ? "selected-menu-item" : ""
               }
               icon={
                 <span className="material-symbols-outlined sidebar-icon">
                   add_box
                 </span>
               }
-              onClick={() => handleMenuItemClick("admitted")}
+              onClick={() => handleMenuItemClick("newOrder")}
             >
               New Order
             </MenuItem>
@@ -112,14 +112,14 @@ function SidebarComp() {
           <div className="sidebar-link">
             <MenuItem
               className={
-                selectedMenuItem === "users" ? "selected-menu-item" : ""
+                selectedMenuItem === "admitted" ? "selected-menu-item" : ""
               }
               icon={
                 <span className="material-symbols-outlined sidebar-icon">
                   group
                 </span>
               }
-              onClick={() => handleMenuItemClick("users")}
+              onClick={() => handleMenuItemClick("admitted")}
             >
               Users
             </MenuItem>

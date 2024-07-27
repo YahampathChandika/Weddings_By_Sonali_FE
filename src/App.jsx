@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import PatientDetails from "./pages/PatientDetails";
 import PatientHistory from "./pages/PatientHistory";
+import NewOrder from "./pages/NewOrder";
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
       <Route path="home" element={<Home />}>
         <Route index element={<Overview />} />
         <Route path="overview" element={<Overview />} />
+        <Route path="newOrder" element={<NewOrder />} />
+
+
         <Route path="users" element={<Users />} />
         <Route path="admitted" element={<Admitted />} />
         <Route path="patients" element={<Patients />} />
