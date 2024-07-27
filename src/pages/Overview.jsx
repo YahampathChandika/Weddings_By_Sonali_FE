@@ -29,41 +29,41 @@ export default function Overview() {
       <Row className="flex">
         <Col className="mr-8 w-2/12">
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
-            <p className="text-lg font-medium">Patients</p>
-            <p className="text-xs text-txtgray">Current</p>
+            <p className="text-lg font-medium">New Orders</p>
+            <p className="text-xs text-txtgray">This month</p>
             <p className="text-2xl text-txtblue mt-3">0{patientData?.payload?.totalPatients}</p>
           </Row>
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 mt-8 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
-            <p className="text-lg font-medium">Patients In</p>
-            <p className="text-xs text-txtgray">Today</p>
-            <p className="text-2xl text-txtblue mt-3">03</p>
+            <p className="text-lg font-medium">Ongoing</p>
+            <p className="text-xs text-txtgray">Orders</p>
+            <p className="text-2xl text-txtblue mt-3">10</p>
           </Row>
         </Col>
         <Col className="mr-8 w-2/12">
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
-            <p className="text-lg font-medium">Alerts</p>
-            <p className="text-xs text-txtgray">Current</p>
-            <p className="text-2xl text-txtblue mt-3">0{(patientData?.payload?.unstablePatients) +  (patientData?.payload?.criticalPatients)}</p>
+            <p className="text-lg font-medium">Upcoming</p>
+            <p className="text-xs text-txtgray">Orders</p>
+            <p className="text-2xl text-txtblue mt-3">03{(patientData?.payload?.unstablePatients) +  (patientData?.payload?.criticalPatients)}</p>
           </Row>
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 mt-8 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
-            <p className="text-lg font-medium">Patients Out</p>
-            <p className="text-xs text-txtgray">Today</p>
+            <p className="text-lg font-medium">Completed</p>
+            <p className="text-xs text-txtgray">This month</p>
             <p className="text-2xl text-txtblue mt-3">01</p>
           </Row>
         </Col>
 
         <Col className="bg-white w-1/3 rounded-md mr-8 flex-col items-center justify-center">
-          <p className="mt-3 ml-5 pb-1 text-lg font-medium">Patient Flow</p>
+          <p className="mt-3 ml-5 pb-1 text-lg font-medium">Sales</p>
           <OverviewLineChart />
         </Col>
         <Col className="bg-white w-1/3 rounded-md">
-          <p className="mt-3 ml-5 pb-1 text-lg font-medium">Patient Status</p>
+          <p className="mt-3 ml-5 pb-1 text-lg font-medium">Most Used Items</p>
           <OverviewPieChart />
         </Col>
       </Row>
 
       <Row className="bg-white h-96 rounded-md mt-8 flex flex-col">
-        <p className="text-lg p-5 font-medium">Patients’ Details</p>
+        <p className="text-lg p-5 font-medium">Orders</p>
         <div className="flex-grow">
           <OverviewTable />
         </div>

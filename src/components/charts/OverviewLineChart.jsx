@@ -2,14 +2,19 @@ import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
 export default function OverviewLineChart() {
+  const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  const d = new Date();
+  let month1 = month[d.getMonth()-2];
+  let month2 = month[d.getMonth()-1];
   const [series] = useState([
     {
-      name: "Patient In", 
-      data: [3,0,1,2,0,3,2],
+      name: month1, 
+      data: [8,10,5,2],
     },
     {
-      name: 'Patient Out', 
-      data: [1,3,0,4,2,3,4]
+      name: month2, 
+      data: [4,3,9,7]
     },
   ]);
 
@@ -35,13 +40,10 @@ export default function OverviewLineChart() {
     },
     xaxis: {
       categories: [
-        "Sun",
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu",
-        "Fri",
-        "Sat",
+        "Week 1",
+        "Week 2",
+        "Week 3",
+        "Week 4",
       ],
     },
     markers: {
@@ -62,7 +64,7 @@ export default function OverviewLineChart() {
         <ReactApexChart
           options={options}
           series={series}
-          type="line"
+          type="bar"
           height={200} 
         />
       </div>

@@ -118,33 +118,38 @@ export default function OverviewTable() {
         <Cell dataKey="hospitalId" />
       </Column>
 
-      <Column flexGrow={130} fixed sortable>
-        <HeaderCell sortColumn="name">Name</HeaderCell>
+      <Column flexGrow={100} fixed sortable>
+        <HeaderCell sortColumn="name">Customer</HeaderCell>
         <NameCell dataKey="name" />
       </Column>
 
       <Column flexGrow={100} sortable>
-        <HeaderCell>Age</HeaderCell>
-        <AgeCell dataKey="dateOfBirth" />
-      </Column>
-
-      <Column flexGrow={100} sortable>
-        <HeaderCell>Gender</HeaderCell>
+        <HeaderCell>Phone</HeaderCell>
         <Cell dataKey="gender" />
       </Column>
 
-      <Column flexGrow={200} sortable>
-        <HeaderCell>Diagnosis</HeaderCell>
+      <Column flexGrow={100} sortable>
+        <HeaderCell>Event</HeaderCell>
         <Cell dataKey="diagnosis" />
       </Column>
 
       <Column flexGrow={100} sortable>
-        <HeaderCell>Alerts</HeaderCell>
+        <HeaderCell>Release Date</HeaderCell>
         <Cell className="pl-3" dataKey="alertCount" />
       </Column>
 
-      <Column flexGrow={120}>
-        <HeaderCell>Status</HeaderCell>
+      <Column flexGrow={100}>
+        <HeaderCell>Event Date</HeaderCell>
+        <Cell dataKey="condition" />
+      </Column>
+
+      <Column flexGrow={100}>
+        <HeaderCell>Event Time</HeaderCell>
+        <Cell dataKey="condition" />
+      </Column>
+
+      <Column flexGrow={100}>
+        <HeaderCell>Return Date</HeaderCell>
         <Cell dataKey="condition" />
       </Column>
     </Table>

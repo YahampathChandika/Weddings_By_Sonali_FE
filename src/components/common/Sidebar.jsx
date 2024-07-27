@@ -35,7 +35,7 @@ function SidebarComp() {
         className="sidebar"
       >
         <Menu>
-          <p className="sidebar-title">VITAL CARE</p>
+          <p className="sidebar-title">Weddings <br/>By Sonali</p>
 
           {/* <div
             className="collapse-btn"
@@ -66,31 +66,16 @@ function SidebarComp() {
           <div className="sidebar-link">
             <MenuItem
               className={
-                selectedMenuItem === "users" ? "selected-menu-item" : ""
-              }
-              icon={
-                <span className="material-symbols-outlined sidebar-icon">
-                  group
-                </span>
-              }
-              onClick={() => handleMenuItemClick("users")}
-            >
-              Users
-            </MenuItem>
-          </div>
-          <div className="sidebar-link">
-            <MenuItem
-              className={
                 selectedMenuItem === "admitted" ? "selected-menu-item" : ""
               }
               icon={
                 <span className="material-symbols-outlined sidebar-icon">
-                  ward
+                  add_box
                 </span>
               }
               onClick={() => handleMenuItemClick("admitted")}
             >
-              Admitted
+              New Order
             </MenuItem>
           </div>
           <div className="sidebar-link">
@@ -106,7 +91,7 @@ function SidebarComp() {
               }
               onClick={() => handleMenuItemClick("patients")}
             >
-              Patients
+              Waiting List
             </MenuItem>
           </div>
           <div className="sidebar-link">
@@ -116,12 +101,27 @@ function SidebarComp() {
               }
               icon={
                 <span className="material-symbols-outlined sidebar-icon">
-                  account_circle
+                  inventory_2
                 </span>
               }
               onClick={() => handleMenuItemClick("profile")}
             >
-              Profile
+              Inventory
+            </MenuItem>
+          </div>
+          <div className="sidebar-link">
+            <MenuItem
+              className={
+                selectedMenuItem === "users" ? "selected-menu-item" : ""
+              }
+              icon={
+                <span className="material-symbols-outlined sidebar-icon">
+                  group
+                </span>
+              }
+              onClick={() => handleMenuItemClick("users")}
+            >
+              Users
             </MenuItem>
           </div>
         </Menu>
