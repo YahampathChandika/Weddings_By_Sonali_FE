@@ -121,11 +121,11 @@ export default function Users() {
             </Row>
           </Row>
         </Row>
-        <Row className="mr-8 w-full flex mt-6 justify-between items-center">
-          <Row className="bg-white w-3/12 h-28 rounded-md py-3 px-5 flex justify-between items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
+        <Row className="mr-8 w-full flex mt-6 justify-start items-center space-x-36">
+          <Row className="bg-white w-1/5 h-32 rounded-md py-3 px-5 flex justify-between items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
             <Col>
               <p className="text-lg font-medium">Admins</p>
-              <p className="text-xs text-txtgray">Current</p>
+              <p className="text-xs text-txtgray">Total</p>
               <p className="text-2xl text-txtblue mt-3">0{adminUsers}</p>
             </Col>
             <Col>
@@ -134,35 +134,22 @@ export default function Users() {
               </span>
             </Col>
           </Row>
-          <Row className="bg-white w-3/12 h-28 rounded-md py-3 px-5 flex justify-between items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
+          <Row className="bg-white w-1/5 h-32 rounded-md py-3 px-5 flex justify-between items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
             <Col>
-              <p className="text-lg font-medium">Doctors</p>
-              <p className="text-xs text-txtgray">Current</p>
+              <p className="text-lg font-medium">Users</p>
+              <p className="text-xs text-txtgray">Total</p>
               <p className="text-2xl text-txtblue mt-3">0{doctorUsers}</p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
-                stethoscope
-              </span>
-            </Col>
-          </Row>
-          <Row className="bg-white w-3/12 h-28 rounded-md py-3 px-5 flex justify-between items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
-            <Col>
-              <p className="text-lg font-medium">Nurses</p>
-              <p className="text-xs text-txtgray">Current</p>
-              <p className="text-2xl text-txtblue mt-3">0{nurseUsers}</p>
-            </Col>
-            <Col>
-              <span className="material-symbols-outlined text-4xl font-light text-txtblue">
-                vaccines
+                account_circle
               </span>
             </Col>
           </Row>
         </Row>
       </Row>
 
-      <Row className="bg-white h-96 rounded-md mt-6 flex flex-col">
-        <p className="text-lg p-5 font-medium">Users' Details</p>
+      <Row className="bg-white h-96 rounded-md p-5 mt-6 flex flex-col">
         <div className="flex-grow">
           <UsersTable users={filteredUsers} />
         </div>

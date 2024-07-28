@@ -18,8 +18,9 @@ function App() {
         <Route path="overview" element={<Overview />} />
         <Route path="newOrder" element={<NewOrder />} />
         <Route path="orders" element={<Orders />} />
-
         <Route path="users" element={<Users />} />
+
+        
         <Route path="admitted" element={<Admitted />} />
         <Route path="patients" element={<Orders />} />
         {/* <Route path="profile" element={<Profile />} /> */}

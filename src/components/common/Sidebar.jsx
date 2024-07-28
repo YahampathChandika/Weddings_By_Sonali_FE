@@ -111,14 +111,14 @@ function SidebarComp() {
           <div className="sidebar-link">
             <MenuItem
               className={
-                selectedMenuItem === "admitted" ? "selected-menu-item" : ""
+                selectedMenuItem === "users" ? "selected-menu-item" : ""
               }
               icon={
                 <span className="material-symbols-outlined sidebar-icon">
                   group
                 </span>
               }
-              onClick={() => handleMenuItemClick("admitted")}
+              onClick={() => handleMenuItemClick("users")}
             >
               Users
             </MenuItem>
