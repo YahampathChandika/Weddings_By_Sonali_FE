@@ -4,6 +4,7 @@ import { AutoComplete, Divider, InputGroup } from "rsuite";
 import Details from "../components/trackOrder/Details";
 import Items from "../components/trackOrder/Items";
 import Release from "../components/trackOrder/Release";
+import Return from "../components/trackOrder/Return";
 
 export default function TrackOrder() {
   const steps = [
@@ -111,7 +112,7 @@ export default function TrackOrder() {
         {activeStep === "Details" && <Details />}
         {activeStep === "Items" && <Items />}
         {activeStep === "Release" && <Release />}
-        {/* {activeStep === "Return" && <Return />} */}
+        {activeStep === "Return" && <Return />}
       </div>
     </div>
   );
