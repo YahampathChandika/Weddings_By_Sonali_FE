@@ -22,6 +22,24 @@ const defaultData = [
     available: "No",
     quantity: 20,
   },
+  {
+    id: 2,
+    code: "A002",
+    name: "Item 2",
+    type: "Type B",
+    usage: "10",
+    available: "No",
+    quantity: 20,
+  },
+  {
+    id: 2,
+    code: "A002",
+    name: "Item 2",
+    type: "Type B",
+    usage: "10",
+    available: "No",
+    quantity: 20,
+  },
 ];
 
 const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
@@ -123,7 +141,7 @@ export default function Items() {
           <Cell align="center" dataKey="code" />
         </Column>
 
-        <Column width={200}>
+        <Column flexGrow={1}>
           <HeaderCell>Name</HeaderCell>
           <Cell dataKey="name" />
         </Column>
@@ -154,8 +172,12 @@ export default function Items() {
         </Column>
       </Table>
       <div className="flex justify-end space-x-10">
-        <button className="w-48 h-10 bg-green text-white p-4 text-lg flex items-center justify-center  rounded-md">PDF</button>
-        <button className="w-48 h-10 bg-txtdarkblue text-white p-4 text-lg flex items-center justify-center  rounded-md">Save</button>
+        <button className="w-48 h-10 bg-green text-white p-4 text-lg flex items-center justify-center  rounded-md">
+          PDF
+        </button>
+        <button className="w-48 h-10 bg-txtdarkblue text-white p-4 text-lg flex items-center justify-center  rounded-md">
+          Save
+        </button>
       </div>
     </div>
   );

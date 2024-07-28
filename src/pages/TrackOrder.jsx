@@ -3,6 +3,7 @@ import UserDetails from "../components/common/UserDetails";
 import { AutoComplete, Divider, InputGroup } from "rsuite";
 import Details from "../components/trackOrder/Details";
 import Items from "../components/trackOrder/Items";
+import Release from "../components/trackOrder/Release";
 
 export default function TrackOrder() {
   const steps = [
@@ -109,7 +110,7 @@ export default function TrackOrder() {
       <div className="bg-white w-full flex flex-col justify-center items-center py-8 px-10 mt-10 rounded-md">
         {activeStep === "Details" && <Details />}
         {activeStep === "Items" && <Items />}
-        {/* {activeStep === "Release" && <Release />} */}
+        {activeStep === "Release" && <Release />}
         {/* {activeStep === "Return" && <Return />} */}
       </div>
     </div>

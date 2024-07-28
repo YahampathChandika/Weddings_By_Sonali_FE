@@ -9,6 +9,7 @@ import 'rsuite/AutoComplete/styles/index.css';
 import 'rsuite/Divider/styles/index.css';
 import 'rsuite/Modal/styles/index.css';
 import 'rsuite/DateRangePicker/styles/index.css';
+import 'rsuite/Checkbox/styles/index.css';
 import { store } from './store/Store.js'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
