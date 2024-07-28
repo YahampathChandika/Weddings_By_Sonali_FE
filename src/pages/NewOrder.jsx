@@ -259,20 +259,20 @@ export default function NewOrder() {
           </div>
         </div>
         <Divider className="text-txtgray w-11/12 !mx-auto" />
-        <div className="w-full flex flex-row justify-end mt-10 mb-4 px-10">
+        <div className="w-full flex flex-row justify-end mt-10 mb-4 pr-20 ">
           <button
             type="button"
             onClick={() => {
               handleClose();
               reset();
             }}
-            className="w-1/2 h-11 rounded-md mr-4 border-solid border border-slate-300 hover:bg-slate-200 transition-all duration-300"
+            className="w-5/12 h-11 rounded-md mr-4 border-solid border border-slate-300 hover:bg-slate-200 transition-all duration-300"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="w-1/2 h-11 rounded-md bg-blue-700 text-white hover:bg-blue-800 transition-all duration-300"
+            className="w-5/12 h-11 rounded-md bg-blue-700 text-white hover:bg-blue-800 transition-all duration-300"
           >
             Save
           </button>

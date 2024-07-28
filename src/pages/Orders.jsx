@@ -5,10 +5,11 @@ import AddPatientModal from "../components/modals/AddPatientModal";
 import UserDetails from "../components/common/UserDetails";
 import { useGetPatientListQuery } from "../store/api/patientApi";
 
-export default function Patients() {
+export default function Orders() {
   const { data: patientData, isLoading, error } = useGetPatientListQuery();
   const [patientModalOpen, setPatientModalOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [orderType, setOrderType] = useState("waiting");
 
   const handlePatientModalOpen = () => setPatientModalOpen(true);
   const handlePatientModalClose = () => setPatientModalOpen(false);
@@ -45,14 +46,23 @@ export default function Patients() {
     setSearchValue("");
   };
 
+  const orderTypeMapping = {
+    waiting: { icon: "calendar_clock", title: "Waiting Orders" },
+    ongoing: { icon: "event", title: "Ongoing Orders" },
+    upcoming: { icon: "event_upcoming", title: "Upcoming Orders" },
+    past: { icon: "event_available", title: "Past Orders" },
+  };
+
+  const currentOrderType = orderTypeMapping[orderType];
+
   return (
     <Container className="w-full">
       <Row className="pb-10 flex justify-between">
         <Row className="flex items-center mb-5">
           <span className="material-symbols-outlined sidebar-icon text-black">
-            patient_list
+            {currentOrderType.icon}
           </span>
-          <p className="text-2xl font-bold ml-4">Patients</p>
+          <p className="text-2xl font-bold ml-4">{currentOrderType.title}</p>
         </Row>
         <UserDetails />
       </Row>
@@ -94,46 +104,88 @@ export default function Patients() {
               add_circle
             </span>
             <p className="text-lg font-medium text-txtdarkblue">
-              Add New Patient
+              Add New Order
             </p>
           </Row>
         </Row>
         <Row className="mr-8 w-full flex mt-6 justify-between items-center">
-          <Row className="bg-white w-3/12 h-28 rounded-md py-3 px-5 flex justify-between items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
+          <Row
+            onClick={() => setOrderType("waiting")}
+            className={`bg-white w-1/5 h-28 rounded-md py-3 px-5 flex justify-between items-center cursor-pointer ${
+              orderType === "waiting"
+                ? "scale-105 shadow-md"
+                : "hover:scale-105 hover:shadow-md"
+            } transform transition-transform duration-300`}
+          >
             <Col>
-              <p className="text-lg font-medium">Total</p>
-              <p className="text-xs text-txtgray">All</p>
+              <p className="text-lg font-medium">Waiting</p>
+              <p className="text-xs text-txtgray">Orders</p>
               <p className="text-2xl text-txtblue mt-3">0{totalPatients}</p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
-                ward
+                calendar_clock
               </span>
             </Col>
           </Row>
-          <Row className="bg-white w-3/12 h-28 rounded-md py-3 px-5 flex justify-between items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
+          <Row
+            onClick={() => setOrderType("ongoing")}
+            className={`bg-white w-1/5 h-28 rounded-md py-3 px-5 flex justify-between items-center cursor-pointer ${
+              orderType === "ongoing"
+                ? "scale-105 shadow-md"
+                : "hover:scale-105 hover:shadow-md"
+            } transform transition-transform duration-300`}
+          >
             <Col>
-              <p className="text-lg font-medium">Admitted</p>
-              <p className="text-xs text-txtgray">Current</p>
+              <p className="text-lg font-medium">Ongoing</p>
+              <p className="text-xs text-txtgray">Orders</p>
               <p className="text-2xl text-txtblue mt-3">0{admittedPatients}</p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
-                inpatient
+                event
               </span>
             </Col>
           </Row>
-          <Row className="bg-white w-3/12 h-28 rounded-md py-3 px-5 flex justify-between items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
+          <Row
+            onClick={() => setOrderType("upcoming")}
+            className={`bg-white w-1/5 h-28 rounded-md py-3 px-5 flex justify-between items-center cursor-pointer ${
+              orderType === "upcoming"
+                ? "scale-105 shadow-md"
+                : "hover:scale-105 hover:shadow-md"
+            } transform transition-transform duration-300`}
+          >
             <Col>
-              <p className="text-lg font-medium">Discharged</p>
-              <p className="text-xs text-txtgray">Past</p>
+              <p className="text-lg font-medium">Upcoming</p>
+              <p className="text-xs text-txtgray">Orders</p>
               <p className="text-2xl text-txtblue mt-3">
                 0{dischargedPatients}
               </p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
-                moving_beds
+                event_upcoming
+              </span>
+            </Col>
+          </Row>
+          <Row
+            onClick={() => setOrderType("past")}
+            className={`bg-white w-1/5 h-28 rounded-md py-3 px-5 flex justify-between items-center cursor-pointer ${
+              orderType === "past"
+                ? "scale-105 shadow-md"
+                : "hover:scale-105 hover:shadow-md"
+            } transform transition-transform duration-300`}
+          >
+            <Col>
+              <p className="text-lg font-medium">Past</p>
+              <p className="text-xs text-txtgray">Orders</p>
+              <p className="text-2xl text-txtblue mt-3">
+                0{dischargedPatients}
+              </p>
+            </Col>
+            <Col>
+              <span className="material-symbols-outlined text-4xl font-light text-txtblue">
+                event_available
               </span>
             </Col>
           </Row>
