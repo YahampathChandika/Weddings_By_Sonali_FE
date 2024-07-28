@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import UserDetails from "../components/common/UserDetails";
 import { AutoComplete, Divider, InputGroup } from "rsuite";
 import Details from "../components/trackOrder/Details";
+import Items from "../components/trackOrder/Items";
 
 export default function TrackOrder() {
   const steps = [
@@ -52,7 +53,7 @@ export default function TrackOrder() {
         <UserDetails />
       </div>
 
-      <div className="bg-white w-full flex flex-col justify-center items-center py-5 rounded-md">
+      <div className="bg-white w-full flex flex-col justify-center items-center py-8 rounded-md">
         <p className="text-black text-xl font-semibold">
           ANTHIRA & MAX | BLUE WATER - WADDUWA | 260 PAX
         </p>
@@ -105,11 +106,11 @@ export default function TrackOrder() {
           ))}
         </div>
       </div>
-      <div className="bg-white w-full flex flex-col justify-center items-center py-5 px-10 mt-10 rounded-md">
+      <div className="bg-white w-full flex flex-col justify-center items-center py-8 px-10 mt-10 rounded-md">
         {activeStep === "Details" && <Details />}
-        {/* {activeStep === "Items" && <Items />}
-        {activeStep === "Release" && <Release />}
-        {activeStep === "Return" && <Return />} */}
+        {activeStep === "Items" && <Items />}
+        {/* {activeStep === "Release" && <Release />} */}
+        {/* {activeStep === "Return" && <Return />} */}
       </div>
     </div>
   );
