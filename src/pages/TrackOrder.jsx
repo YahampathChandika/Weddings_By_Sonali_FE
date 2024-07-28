@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import UserDetails from "../components/common/UserDetails";
 import { AutoComplete, Divider, InputGroup } from "rsuite";
+import Details from "../components/trackOrder/Details";
 
 export default function TrackOrder() {
   const steps = [
@@ -98,11 +99,17 @@ export default function TrackOrder() {
                 </div>
               </div>
               {index < steps.length - 1 && (
-              <Divider className="border-txtgray w-1/6 border-2" />
-            )}
+                <Divider className="border-txtgray w-1/6 border-2" />
+              )}
             </>
           ))}
         </div>
+      </div>
+      <div className="bg-white w-full flex flex-col justify-center items-center py-5 px-10 mt-10 rounded-md">
+        {activeStep === "Details" && <Details />}
+        {/* {activeStep === "Items" && <Items />}
+        {activeStep === "Release" && <Release />}
+        {activeStep === "Return" && <Return />} */}
       </div>
     </div>
   );
