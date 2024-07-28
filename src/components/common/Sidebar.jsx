@@ -123,6 +123,21 @@ function SidebarComp() {
               Users
             </MenuItem>
           </div>
+          <div className="sidebar-link">
+            <MenuItem
+              className={
+                selectedMenuItem === "trackOrder" ? "selected-menu-item" : ""
+              }
+              icon={
+                <span className="material-symbols-outlined sidebar-icon">
+                  group
+                </span>
+              }
+              onClick={() => handleMenuItemClick("trackOrder")}
+            >
+              Track
+            </MenuItem>
+          </div>
         </Menu>
         <div className="sidebar-logout" onClick={handleLogoutOpen}>
           <span className="material-symbols-outlined sidebar-logout-icon">

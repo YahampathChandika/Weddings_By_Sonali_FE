@@ -8,6 +8,7 @@ import PatientDetails from "./pages/PatientDetails";
 import PatientHistory from "./pages/PatientHistory";
 import NewOrder from "./pages/NewOrder";
 import Orders from "./pages/Orders";
+import TrackOrder from "./pages/TrackOrder";
 
 function App() {
   return (
@@ -19,8 +20,9 @@ function App() {
         <Route path="newOrder" element={<NewOrder />} />
         <Route path="orders" element={<Orders />} />
         <Route path="users" element={<Users />} />
+        <Route path="trackOrder" element={<TrackOrder />} />
 
-        
+
         <Route path="admitted" element={<Admitted />} />
         <Route path="patients" element={<Orders />} />
         {/* <Route path="profile" element={<Profile />} /> */}
