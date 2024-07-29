@@ -35,7 +35,10 @@ function SidebarComp() {
         className="sidebar"
       >
         <Menu>
-          <p className="sidebar-title">Weddings <br/>By Sonali</p>
+          <p className="sidebar-title">
+            Weddings <br />
+            By Sonali
+          </p>
 
           {/* <div
             className="collapse-btn"
@@ -123,21 +126,6 @@ function SidebarComp() {
               Users
             </MenuItem>
           </div>
-          <div className="sidebar-link">
-            <MenuItem
-              className={
-                selectedMenuItem === "trackOrder" ? "selected-menu-item" : ""
-              }
-              icon={
-                <span className="material-symbols-outlined sidebar-icon">
-                  group
-                </span>
-              }
-              onClick={() => handleMenuItemClick("trackOrder")}
-            >
-              Track
-            </MenuItem>
-          </div>
         </Menu>
         <div className="sidebar-logout" onClick={handleLogoutOpen}>
           <span className="material-symbols-outlined sidebar-logout-icon">
@@ -146,7 +134,7 @@ function SidebarComp() {
           <p>Logout</p>
         </div>
       </Sidebar>
-      <LogoutModal open={logoutModalOpen} handleClose={handleLogoutClose}/>
+      <LogoutModal open={logoutModalOpen} handleClose={handleLogoutClose} />
     </>
   );
 }

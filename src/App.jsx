@@ -20,14 +20,11 @@ function App() {
         <Route path="overview" element={<Overview />} />
         <Route path="newOrder" element={<NewOrder />} />
         <Route path="orders" element={<Orders />} />
+        <Route path="orders/trackOrder/:id" element={<TrackOrder />} />
         <Route path="users" element={<Users />} />
-        <Route path="trackOrder" element={<TrackOrder />} />
         <Route path="inventory" element={<Inventory />} />
-
-        
         <Route path="admitted" element={<Admitted />} />
         <Route path="patients" element={<Orders />} />
-        {/* <Route path="profile" element={<Profile />} /> */}
         <Route path="patientDetails/:id" element={<PatientDetails />} />
         <Route path="patientHistory/:id" element={<PatientHistory />} />
       </Route>

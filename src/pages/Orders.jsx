@@ -1,46 +1,16 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { AutoComplete, Col, Container, InputGroup, Row } from "rsuite";
-import PatientsTable from "../components/tables/PatientsTable";
-import AddPatientModal from "../components/modals/AddPatientModal";
 import UserDetails from "../components/common/UserDetails";
-import { useGetPatientListQuery } from "../store/api/patientApi";
+import WaitingOrdersTable from "../components/tables/WaitingOrdersTable";
+import OngoingOrdersTable from "../components/tables/OngoingOrdersTable";
+import UpcomingOrdersTable from "../components/tables/UpcomingOrdersTable";
+import PastOrdersTable from "../components/tables/PastOrdersTable";
+import { useNavigate } from "react-router-dom";
 
 export default function Orders() {
-  const { data: patientData, isLoading, error } = useGetPatientListQuery();
-  const [patientModalOpen, setPatientModalOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [orderType, setOrderType] = useState("waiting");
-
-  const handlePatientModalOpen = () => setPatientModalOpen(true);
-  const handlePatientModalClose = () => setPatientModalOpen(false);
-
-  const totalPatients = patientData?.payload?.length || 0;
-  const admittedPatients =
-    patientData?.payload?.filter((patient) => patient.status === "Admitted")
-      .length || 0;
-  const dischargedPatients = totalPatients - admittedPatients;
-
-  const filteredPatients = useMemo(() => {
-    if (!patientData?.payload) return [];
-    return patientData.payload.filter((patient) => {
-      const idMatch = patient.hospitalId.toString().includes(searchValue);
-      const nameMatch = `${patient.firstName} ${patient.lastName}`
-        .toLowerCase()
-        .includes(searchValue.toLowerCase());
-      return idMatch || nameMatch;
-    });
-  }, [patientData, searchValue]);
-
-  const handleSelect = (value) => {
-    const selectedPatient = filteredPatients.find(
-      (patient) =>
-        patient.hospitalId.toString() === value ||
-        `${patient.firstName} ${patient.lastName}` === value
-    );
-    if (selectedPatient) {
-      setSearchValue(selectedPatient.hospitalId.toString());
-    }
-  };
+  const navigate = useNavigate()
 
   const handleClearSearch = () => {
     setSearchValue("");
@@ -74,13 +44,10 @@ export default function Orders() {
           >
             <AutoComplete
               placeholder="Search by Name or ID"
-              data={filteredPatients.map((patient) => ({
-                label: `${patient.firstName} ${patient.lastName}`,
-                value: patient.hospitalId.toString(),
-              }))}
+              // data={}
               value={searchValue}
               onChange={setSearchValue}
-              onSelect={handleSelect}
+              // onSelect={handleSelect}
             />
             <InputGroup.Addon>
               {searchValue && (
@@ -98,7 +65,7 @@ export default function Orders() {
           </InputGroup>
           <Row
             className="min-w-52 flex items-center cursor-pointer"
-            onClick={handlePatientModalOpen}
+            onClick={() => navigate("/home/newOrder")}
           >
             <span className="material-symbols-outlined sidebar-icon text-lg font-medium text-txtdarkblue mr-3 ">
               add_circle
@@ -108,7 +75,7 @@ export default function Orders() {
             </p>
           </Row>
         </Row>
-        <Row className="mr-8 w-full flex mt-6 justify-between items-center">
+        <Row className="mr-8 w-full flex my-8 justify-between items-center">
           <Row
             onClick={() => setOrderType("waiting")}
             className={`bg-white w-1/5 h-28 rounded-md py-3 px-5 flex justify-between items-center cursor-pointer ${
@@ -120,7 +87,7 @@ export default function Orders() {
             <Col>
               <p className="text-lg font-medium">Waiting</p>
               <p className="text-xs text-txtgray">Orders</p>
-              <p className="text-2xl text-txtblue mt-3">0{totalPatients}</p>
+              <p className="text-2xl text-txtblue mt-3">0</p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
@@ -139,7 +106,7 @@ export default function Orders() {
             <Col>
               <p className="text-lg font-medium">Ongoing</p>
               <p className="text-xs text-txtgray">Orders</p>
-              <p className="text-2xl text-txtblue mt-3">0{admittedPatients}</p>
+              <p className="text-2xl text-txtblue mt-3">0</p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
@@ -158,9 +125,7 @@ export default function Orders() {
             <Col>
               <p className="text-lg font-medium">Upcoming</p>
               <p className="text-xs text-txtgray">Orders</p>
-              <p className="text-2xl text-txtblue mt-3">
-                0{dischargedPatients}
-              </p>
+              <p className="text-2xl text-txtblue mt-3">0</p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
@@ -179,9 +144,7 @@ export default function Orders() {
             <Col>
               <p className="text-lg font-medium">Past</p>
               <p className="text-xs text-txtgray">Orders</p>
-              <p className="text-2xl text-txtblue mt-3">
-                0{dischargedPatients}
-              </p>
+              <p className="text-2xl text-txtblue mt-3">0</p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
@@ -191,15 +154,14 @@ export default function Orders() {
           </Row>
         </Row>
       </Row>
-      <Row className="bg-white h-96 rounded-md mt-6 flex flex-col">
+      <Row className="bg-white h-96 rounded-md flex flex-col">
         <div className="flex-grow">
-          <PatientsTable data={filteredPatients} />
+          {orderType === "waiting" && <WaitingOrdersTable />}
+          {orderType === "ongoing" && <OngoingOrdersTable />}
+          {orderType === "upcoming" && <UpcomingOrdersTable />}
+          {orderType === "past" && <PastOrdersTable />}
         </div>
       </Row>
-      <AddPatientModal
-        open={patientModalOpen}
-        handleClose={handlePatientModalClose}
-      />
     </Container>
   );
 }
