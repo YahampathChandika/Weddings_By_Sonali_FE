@@ -13,7 +13,7 @@ export default {
         'txtdarkblue': '#2C3D8F',
         'black': '#1F1F1F',
         'red': '#e64747',
-        'green': '#8fb935',
+        'green': '#1DAB87',
         'yellow': '#e6e22e',
       },
     },

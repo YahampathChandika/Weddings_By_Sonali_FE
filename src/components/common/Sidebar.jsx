@@ -66,14 +66,14 @@ function SidebarComp() {
           <div className="sidebar-link">
             <MenuItem
               className={
-                selectedMenuItem === "admitted" ? "selected-menu-item" : ""
+                selectedMenuItem === "newOrder" ? "selected-menu-item" : ""
               }
               icon={
                 <span className="material-symbols-outlined sidebar-icon">
                   add_box
                 </span>
               }
-              onClick={() => handleMenuItemClick("admitted")}
+              onClick={() => handleMenuItemClick("newOrder")}
             >
               New Order
             </MenuItem>
@@ -81,15 +81,14 @@ function SidebarComp() {
           <div className="sidebar-link">
             <MenuItem
               className={
-                selectedMenuItem === "patients" ? "selected-menu-item" : ""
+                selectedMenuItem === "orders" ? "selected-menu-item" : ""
               }
               icon={
                 <span className="material-symbols-outlined sidebar-icon">
-                  {/* personal_injury */}
-                  patient_list
+                  event_note
                 </span>
               }
-              onClick={() => handleMenuItemClick("patients")}
+              onClick={() => handleMenuItemClick("orders")}
             >
               Waiting List
             </MenuItem>
@@ -122,6 +121,21 @@ function SidebarComp() {
               onClick={() => handleMenuItemClick("users")}
             >
               Users
+            </MenuItem>
+          </div>
+          <div className="sidebar-link">
+            <MenuItem
+              className={
+                selectedMenuItem === "trackOrder" ? "selected-menu-item" : ""
+              }
+              icon={
+                <span className="material-symbols-outlined sidebar-icon">
+                  group
+                </span>
+              }
+              onClick={() => handleMenuItemClick("trackOrder")}
+            >
+              Track
             </MenuItem>
           </div>
         </Menu>
