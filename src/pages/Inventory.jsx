@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Input, InputGroup } from "rsuite";
+import { AutoComplete, Container, Input, InputGroup } from "rsuite";
 import UserDetails from "../components/common/UserDetails";
 import SearchIcon from "@rsuite/icons/Search";
 import InventoryTable from "../components/tables/InventoryTable";
@@ -24,8 +24,8 @@ function Inventory() {
         <div className="ml-8 w-1/2 ">
           <p className="text-xl font-medium  text-txtgray ">20 items Total</p>
         </div>
-        <div className="flex   w-1/2  justify-end">
-          <div className="mr-5 w-2/3">
+        <div className="flex w-1/2 justify-between">
+          {/* <div className="mr-5 w-2/3">
             <InputGroup
               inside
               className="flex border-2 border-txtdarkblue  h-10 px-3 mr-5 !rounded-full items-center justify-evenly"
@@ -36,6 +36,33 @@ function Inventory() {
                   search
                 </span>
               </InputGroup.Button>
+            </InputGroup>
+          </div> */}
+          <div className="w-8/12">
+            <InputGroup
+              inside
+              className="flex border-2 h-10 px-3 !rounded-full items-center justify-evenly"
+            >
+              <AutoComplete
+                placeholder="Search by Item ID or Name"
+                // data={data}
+                // value={value}
+                // onChange={handleSearchChange}
+                // onSelect={handleSelectUser}
+              />
+              <InputGroup.Addon>
+                {/* {value && (
+              <span
+                className="material-symbols-outlined sidebar-icon text-lg font-medium text-red cursor-pointer mr-5"
+                onClick={handleClearSearch}
+              >
+                close
+              </span>
+            )} */}
+                <span className="material-symbols-outlined sidebar-icon text-lg font-medium text-txtdarkblue cursor-pointer">
+                  search
+                </span>
+              </InputGroup.Addon>
             </InputGroup>
           </div>
           <div className="min-w-52 flex items-center cursor-pointer">

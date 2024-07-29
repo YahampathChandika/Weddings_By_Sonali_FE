@@ -192,7 +192,6 @@ export default function Orders() {
         </Row>
       </Row>
       <Row className="bg-white h-96 rounded-md mt-6 flex flex-col">
-        <p className="text-lg p-5 font-medium">Patients' Details</p>
         <div className="flex-grow">
           <PatientsTable data={filteredPatients} />
         </div>

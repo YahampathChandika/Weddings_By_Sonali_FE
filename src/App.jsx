@@ -23,6 +23,8 @@ function App() {
         <Route path="users" element={<Users />} />
         <Route path="trackOrder" element={<TrackOrder />} />
         <Route path="inventory" element={<Inventory />} />
+
+        
         <Route path="admitted" element={<Admitted />} />
         <Route path="patients" element={<Orders />} />
         {/* <Route path="profile" element={<Profile />} /> */}
