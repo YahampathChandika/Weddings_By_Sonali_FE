@@ -106,37 +106,32 @@ export default function UsersTable({ users }) {
           </div>
         )}
       >
-        <Column flexGrow={70} align="center" fixed sortable>
+        <Column flexGrow={1} align="center" fixed sortable>
           <HeaderCell>Role</HeaderCell>
           <Cell dataKey="role" />
         </Column>
 
-        <Column flexGrow={130} fixed sortable>
+        <Column flexGrow={3} fixed sortable>
           <HeaderCell>Name</HeaderCell>
           <Cell dataKey="name" />
         </Column>
 
-        <Column flexGrow={100} sortable>
-          <HeaderCell>Reg No</HeaderCell>
-          <Cell dataKey="id" />
-        </Column>
-
-        <Column flexGrow={100}>
+        <Column flexGrow={2}>
           <HeaderCell>Contact</HeaderCell>
           <Cell dataKey="contactNo" />
         </Column>
 
-        <Column flexGrow={200}>
+        <Column flexGrow={2}>
           <HeaderCell>Email</HeaderCell>
           <Cell dataKey="email" />
         </Column>
 
-        <Column flexGrow={100}>
+        <Column flexGrow={2}>
           <HeaderCell>Address</HeaderCell>
           <Cell dataKey="address" />
         </Column>
 
-        <Column flexGrow={120}>
+        <Column flexGrow={1} align="center">
           <HeaderCell>Actions</HeaderCell>
           <ActionCell />
         </Column>
