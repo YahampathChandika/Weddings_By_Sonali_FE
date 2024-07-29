@@ -17,6 +17,7 @@ import { FormHelperText } from "@mui/material";
 import Swal from "sweetalert2";
 import UserDetails from "../components/common/UserDetails";
 import { TimeField } from "@mui/x-date-pickers";
+import { useAddNewOrderMutation } from "../store/api/orderApi";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -24,14 +25,16 @@ const schema = yup.object().shape({
   address: yup.string().required("Address is required"),
   contactNo: yup.string().required("Contact No is required"),
   eventName: yup.string().required("Event Name is required"),
-  eventVenue: yup.string().required("Event Venue is required"),
+  venue: yup.string().required("Event Venue is required"),
   eventDate: yup.date().required("Event Date is required"),
-  eventTime: yup.string().required("Event Time is required"),
+  eventTime: yup.date().required("Event Time is required"),
   returnDate: yup.date().required("Return Date is required"),
   pax: yup.string().required("Pax count is required"),
 });
 
 export default function NewOrder() {
+  const [newOrder] = useAddNewOrderMutation();
+
   const {
     handleSubmit,
     control,
@@ -43,7 +46,43 @@ export default function NewOrder() {
 
   const onSubmit = async (data) => {
     console.log(data);
-  };
+    try {
+      const response = await newOrder(data);
+
+      if (response.data &&!response.data.error) {
+        reset();
+        
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "New Order Added Successfully",
+        });
+
+        } else {
+          console.log("Order adding failed", response);
+          Swal.fire({
+            title: "Oops...",
+            text:
+              response?.error?.data?.payload ||
+              response?.data?.payload ||
+              "Order adding failed",
+            icon: "error",
+          });
+        }
+      } catch (error) {
+        console.log("Order Adding Error", error);
+      }
+    };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -156,7 +195,7 @@ export default function NewOrder() {
                 )}
               />
               <Controller
-                name="eventVenue"
+                name="venue"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
@@ -166,9 +205,9 @@ export default function NewOrder() {
                     label="Venue"
                     variant="outlined"
                     className="w-full"
-                    error={!!errors.eventVenue}
+                    error={!!errors.venue}
                     helperText={
-                      errors.eventVenue ? errors.eventVenue.message : ""
+                      errors.venue ? errors.venue.message : ""
                     }
                   />
                 )}
@@ -201,13 +240,20 @@ export default function NewOrder() {
               <div className="w-full">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={["TimeField"]}>
-                    <TimeField
-                      className="!w-full !mb-5"
-                      label="Event Time"
-                      error={!!errors.eventTime}
-                      helperText={
-                        errors.eventTime ? errors.eventTime.message : " "
-                      }
+                    <Controller
+                      name="eventTime"
+                      control={control}
+                      render={({ field }) => (
+                        <TimeField
+                          {...field}
+                          className="!w-full !mb-5"
+                          label="Event Time"
+                          error={!!errors.eventTime}
+                          helperText={
+                            errors.eventTime ? errors.eventTime.message : " "
+                          }
+                        />
+                      )}
                     />
                   </DemoContainer>
                 </LocalizationProvider>
@@ -229,9 +275,7 @@ export default function NewOrder() {
                           format="YYYY-MM-DD"
                           error={!!errors.returnDate}
                           helperText={
-                            errors.returnDate
-                              ? errors.returnDate.message
-                              : " "
+                            errors.returnDate ? errors.returnDate.message : " "
                           }
                         />
                       )}
@@ -263,7 +307,6 @@ export default function NewOrder() {
           <button
             type="button"
             onClick={() => {
-              handleClose();
               reset();
             }}
             className="w-5/12 h-11 rounded-md mr-4 border-solid border border-slate-300 hover:bg-slate-200 transition-all duration-300"

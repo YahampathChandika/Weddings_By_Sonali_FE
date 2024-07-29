@@ -3,16 +3,19 @@ import api from "./api";
 export const orderApi = api.injectEndpoints({
     reducerPath: "orderApi",
     endpoints: (builder) => ({
-        newOrder: builder.mutation({
+        addNewOrder: builder.mutation({
             query: (data) => {
                 return {
-                    url: "order/newOrder",
+                    url: "order/addNewOrder",
                     method: "POST",
                     body: data,
                 };
             },
+        }),
+        getWaitingOrders: builder.query({
+            query: () => "order/getWaitingOrders",
         })
     })
 })
 
-export const { useNewOrderMutation } = orderApi;
+export const { useAddNewOrderMutation } = orderApi;
