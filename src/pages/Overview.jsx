@@ -5,10 +5,8 @@ import OverviewPieChart from "../components/charts/OverviewPieChart";
 import OverviewTable from "../components/tables/OverviewTable";
 import { useGetSignedUserQuery } from "../store/api/userApi";
 import UserDetails from "../components/common/UserDetails";
-import { useGetAdmittedPatientsQuery } from "../store/api/patientApi";
 
 export default function Overview() {
-  const { data: patientData, isLoading, error } = useGetAdmittedPatientsQuery();
 
   const { data: signedUser } = useGetSignedUserQuery();
   const user = signedUser?.payload;
@@ -17,7 +15,8 @@ export default function Overview() {
       <Row className="pb-10 flex justify-between">
         <Col>
           <p className="text-2xl font-bold">
-            Welcome, Mr. {user?.firstName} {user?.lastName}!
+            {/* Welcome, Mr. {user?.firstName} {user?.lastName}! */}
+            Welcome, Mr. {user?.name}!
           </p>
           <p className="text-txtgray">
             Check the latest updates on your account
@@ -31,7 +30,7 @@ export default function Overview() {
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
             <p className="text-lg font-medium">New Orders</p>
             <p className="text-xs text-txtgray">This month</p>
-            <p className="text-2xl text-txtblue mt-3">0{patientData?.payload?.totalPatients}</p>
+            <p className="text-2xl text-txtblue mt-3">0</p>
           </Row>
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 mt-8 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
             <p className="text-lg font-medium">Ongoing</p>
@@ -43,7 +42,7 @@ export default function Overview() {
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
             <p className="text-lg font-medium">Upcoming</p>
             <p className="text-xs text-txtgray">Orders</p>
-            <p className="text-2xl text-txtblue mt-3">03{(patientData?.payload?.unstablePatients) +  (patientData?.payload?.criticalPatients)}</p>
+            <p className="text-2xl text-txtblue mt-3">03</p>
           </Row>
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 mt-8 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
             <p className="text-lg font-medium">Completed</p>

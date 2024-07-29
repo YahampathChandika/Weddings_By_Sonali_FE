@@ -75,20 +75,6 @@ export default function UsersTable({ users }) {
     }, 500);
   };
 
-  const ImageCell = ({ rowData, dataKey, ...props }) => (
-    <Cell {...props}>
-      <img
-        src={`http://localhost:4000/${rowData[dataKey]}`}
-        alt="Profile"
-        style={{ width: 35, height: 35, borderRadius: "50%" }}
-      />
-    </Cell>
-  );
-
-  const NameCell = ({ rowData, ...props }) => (
-    <Cell {...props}>{`${rowData.firstName} ${rowData.lastName}`}</Cell>
-  );
-
   const ActionCell = ({ rowData, ...props }) => (
     <Cell {...props}>
       <span className="material-symbols-outlined sidebar-icon text-lg font-medium text-txtdarkblue mr-3 cursor-pointer">
@@ -120,11 +106,6 @@ export default function UsersTable({ users }) {
           </div>
         )}
       >
-        <Column width={60} align="center" fixed>
-          <HeaderCell></HeaderCell>
-          <ImageCell dataKey="image" />
-        </Column>
-
         <Column flexGrow={70} align="center" fixed sortable>
           <HeaderCell>Role</HeaderCell>
           <Cell dataKey="role" />
@@ -132,7 +113,7 @@ export default function UsersTable({ users }) {
 
         <Column flexGrow={130} fixed sortable>
           <HeaderCell>Name</HeaderCell>
-          <NameCell dataKey="name" />
+          <Cell dataKey="name" />
         </Column>
 
         <Column flexGrow={100} sortable>
@@ -140,22 +121,22 @@ export default function UsersTable({ users }) {
           <Cell dataKey="id" />
         </Column>
 
-        <Column flexGrow={100} sortable>
+        <Column flexGrow={100}>
           <HeaderCell>Contact</HeaderCell>
           <Cell dataKey="contactNo" />
         </Column>
 
-        <Column flexGrow={200} sortable>
+        <Column flexGrow={200}>
           <HeaderCell>Email</HeaderCell>
           <Cell dataKey="email" />
         </Column>
 
-        <Column flexGrow={100} sortable>
-          <HeaderCell>Speciality</HeaderCell>
-          <Cell dataKey="speciality" />
+        <Column flexGrow={100}>
+          <HeaderCell>Address</HeaderCell>
+          <Cell dataKey="address" />
         </Column>
 
-        <Column flexGrow={120} sortable>
+        <Column flexGrow={120}>
           <HeaderCell>Actions</HeaderCell>
           <ActionCell />
         </Column>

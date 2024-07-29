@@ -6,16 +6,14 @@ export default function UserDetails() {
   const user = signedUser?.payload;
   return (
     <div className="flex">
-      <img
+      {/* <img
         src={`http://localhost:4000/${user?.image}`}
         alt="Profile"
         className="w-12 h-12 rounded-full mr-5"
-      />
+      /> */}
       <div>
-        <p className="text-xl font-semibold">
-          {user?.firstName} {user?.lastName}
-        </p>
-        <p className="text-txtgray">{user?.speciality || user?.role}</p>
+        <p className="text-xl font-semibold">{user?.name}</p>
+        <p className="text-txtgray">{user?.roles?.role}</p>
       </div>
     </div>
   );

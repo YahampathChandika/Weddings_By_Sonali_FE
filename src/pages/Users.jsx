@@ -19,7 +19,6 @@ export default function Users() {
     refetch,
   } = useGetAllUsersQuery();
 
-  console.log("filteredUsers", value);
 
   useEffect(() => {
     if (getAllUsers?.payload) {
@@ -28,21 +27,17 @@ export default function Users() {
   }, [getAllUsers]);
 
   const totalUsers = getAllUsers?.payload?.length || 0;
-  const adminUsers =
+  const admins =
     getAllUsers?.payload?.filter((user) => user.role === "Admin").length || 0;
-  const doctorUsers =
-    getAllUsers?.payload?.filter((user) => user.role === "Doctor").length || 0;
-  const nurseUsers =
-    getAllUsers?.payload?.filter((user) => user.role === "Nurse").length || 0;
+  const users =
+    getAllUsers?.payload?.filter((user) => user.role === "User").length || 0;
 
   const handleSearchChange = (searchValue) => {
     setValue(searchValue);
 
     if (searchValue) {
       const filtered = getAllUsers?.payload?.filter((user) =>
-        `${user.firstName} ${user.lastName}`
-          .toLowerCase()
-          .includes(searchValue.toLowerCase())
+        `${user.name}`.toLowerCase().includes(searchValue.toLowerCase())
       );
       setFilteredUsers(filtered);
     } else {
@@ -57,13 +52,13 @@ export default function Users() {
 
   const handleSelectUser = (selectedUser) => {
     const user = getAllUsers?.payload?.find(
-      (user) => `${user.firstName} ${user.lastName}` === selectedUser
+      (user) => `${user.name}` === selectedUser
     );
     setFilteredUsers(user ? [user] : []);
   };
 
   const data = getAllUsers?.payload?.map((user) => {
-    return `${user.firstName} ${user.lastName}`;
+    return `${user.name}`;
   });
 
   return (
@@ -126,7 +121,7 @@ export default function Users() {
             <Col>
               <p className="text-lg font-medium">Admins</p>
               <p className="text-xs text-txtgray">Total</p>
-              <p className="text-2xl text-txtblue mt-3">0{adminUsers}</p>
+              <p className="text-2xl text-txtblue mt-3">0{admins}</p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
@@ -138,7 +133,7 @@ export default function Users() {
             <Col>
               <p className="text-lg font-medium">Users</p>
               <p className="text-xs text-txtgray">Total</p>
-              <p className="text-2xl text-txtblue mt-3">0{doctorUsers}</p>
+              <p className="text-2xl text-txtblue mt-3">0{users}</p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">

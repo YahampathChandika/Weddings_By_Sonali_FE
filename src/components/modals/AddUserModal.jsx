@@ -4,10 +4,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Divider, Modal } from "rsuite";
 import TextField from "@mui/material/TextField";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateField } from "@mui/x-date-pickers/DateField";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -25,19 +21,18 @@ import {
 import Swal from "sweetalert2";
 
 const schema = yup.object().shape({
-  firstName: yup.string().required("First Name is required"),
+  name: yup.string().required("Name is required"),
   email: yup
     .string()
     .email("Invalid email format")
     .required("Email is required"),
-  // birthday: yup.date().required("Birthday is required"),
   username: yup.string().required("Username is required"),
-  lastName: yup.string().required("Last Name is required"),
-  contact: yup.string().required("Contact No is required"),
-  role: yup.string().required("Role is required"),
+  address: yup.string().required("Address is required"),
+  contactNo: yup.string().required("Contact No is required"),
+  roleId: yup.string().required("Role is required"),
   password: yup
     .string()
-    .min(4, "Password must be at least 6 characters")
+    .min(6, "Password must be at least 6 characters")
     .required("Password is required"),
 });
 
@@ -51,7 +46,6 @@ export default function AddUserModal({ open, handleClose }) {
     resolver: yupResolver(schema),
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [profilePic, setProfilePic] = useState("");
 
   const [addUser] = useAddUserMutation();
   const { refetch } = useGetAllUsersQuery();
@@ -61,69 +55,42 @@ export default function AddUserModal({ open, handleClose }) {
     event.preventDefault();
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setProfilePic(file);
-  };
-
   const onSubmit = async (data) => {
-    if (!profilePic) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Please select a profile picture",
-      });
-      return;
-    } else {
-      const formData = new FormData();
+    try {
+      const response = await addUser(data);
 
-      formData.append("firstName", data.firstName);
-      formData.append("lastName", data.lastName);
-      formData.append("email", data.email);
-      formData.append("speciality", data.speciality);
-      formData.append("username", data.username);
-      formData.append("contactNo", data.contact);
-      formData.append("roleId", data.role);
-      formData.append("password", data.password);
-      formData.append("image", profilePic);
-
-      try {
-        const response = await addUser(formData);
-
-        if (response.data && !response.data.error) {
-          reset();
-          handleClose();
-          refetch();
-          setProfilePic("");
-          const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.onmouseenter = Swal.stopTimer;
-              toast.onmouseleave = Swal.resumeTimer;
-            },
-          });
-          Toast.fire({
-            icon: "success",
-            title: "User Registered Successfully",
-          });
-        } else {
-          console.log("User adding failed", response);
-          Swal.fire({
-            title: "Oops...",
-            text:
-              response?.error?.data?.payload ||
-              response?.data?.payload ||
-              "user registration failed",
-            icon: "error",
-          });
-        }
-      } catch (error) {
-        console.log("User Reg Error", error);
+      if (response.data && !response.data.error) {
+        reset();
+        handleClose();
+        refetch();
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "User Registered Successfully",
+        });
+      } else {
+        console.log("User adding failed", response);
+        Swal.fire({
+          title: "Oops...",
+          text:
+            response?.error?.data?.payload ||
+            response?.data?.payload ||
+            "user registration failed",
+          icon: "error",
+        });
       }
+    } catch (error) {
+      console.log("User Reg Error", error);
     }
   };
 
@@ -138,36 +105,28 @@ export default function AddUserModal({ open, handleClose }) {
             </div>
           </div>
           <Divider className="text-txtgray !mt-2 w-11/12 !mx-auto" />
-          <div className="flex justify-between w-full mt-8 px-10 space-x-10">
+          <div className="px-10">
+            <Controller
+              name="name"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  id="outlined-basic name"
+                  label="Name"
+                  variant="outlined"
+                  className=" w-full"
+                  error={!!errors.name}
+                  helperText={errors.name ? errors.name.message : ""}
+                />
+              )}
+            />
+          </div>
+          <div className="flex justify-between w-full mt-5 px-10 space-x-10">
             <div className="flex-col w-1/2">
-              <div className="userregistration-input mb-6 h-32">
-                <label className="flex items-center text-txtgray justify-between px-2 cursor-pointer">
-                  <input
-                    type="file"
-                    accept="image/jpeg, image/png, image/gif"
-                    onChange={handleFileChange}
-                    style={{ display: "none" }}
-                  />
-                  {profilePic ? (
-                    <img
-                      src={URL.createObjectURL(profilePic)}
-                      alt="Profile"
-                      className="w-32 h-32 rounded-full"
-                    />
-                  ) : (
-                    <img
-                      src={
-                        "https://toppng.com/uploads/preview/donna-picarro-dummy-avatar-115633298255iautrofxa.png"
-                      }
-                      alt="Profile"
-                      className="profile-image w-32 h-32 rounded-full"
-                    />
-                  )}
-                  Profile Image
-                </label>
-              </div>
               <Controller
-                name="contact"
+                name="contactNo"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
@@ -177,22 +136,26 @@ export default function AddUserModal({ open, handleClose }) {
                     label="Contact No"
                     variant="outlined"
                     className="!mb-5 w-full"
-                    error={!!errors.contact}
-                    helperText={errors.contact ? errors.contact.message : ""}
+                    error={!!errors.contactNo}
+                    helperText={
+                      errors.contactNo ? errors.contactNo.message : ""
+                    }
                   />
                 )}
               />
               <Controller
-                name="speciality"
+                name="address"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
                   <TextField
                     {...field}
                     id="outlined-basic"
-                    label="Speciality"
+                    label="Address"
                     variant="outlined"
                     className="!mb-5 w-full"
+                    error={!!errors.address}
+                    helperText={errors.address ? errors.address.message : ""}
                   />
                 )}
               />
@@ -215,40 +178,6 @@ export default function AddUserModal({ open, handleClose }) {
             </div>
             <div className="flex-col w-1/2 text-right">
               <Controller
-                name="firstName"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    id="outlined-basic name"
-                    label="First Name"
-                    variant="outlined"
-                    className="!mb-5 w-full"
-                    error={!!errors.firstName}
-                    helperText={
-                      errors.firstName ? errors.firstName.message : ""
-                    }
-                  />
-                )}
-              />
-              <Controller
-                name="lastName"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    id="outlined-basic"
-                    label="Last Name"
-                    variant="outlined"
-                    className="!mb-5 w-full"
-                    error={!!errors.lastName}
-                    helperText={errors.lastName ? errors.lastName.message : ""}
-                  />
-                )}
-              />
-              <Controller
                 name="email"
                 control={control}
                 defaultValue=""
@@ -265,11 +194,14 @@ export default function AddUserModal({ open, handleClose }) {
                 )}
               />
               <Controller
-                name="role"
+                name="roleId"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
-                  <FormControl className="w-full !mb-5 !text-left" error={!!errors.role}>
+                  <FormControl
+                    className="w-full !mb-5 !text-left"
+                    error={!!errors.roleId}
+                  >
                     <InputLabel id="demo-simple-select-label" className="">
                       Role
                     </InputLabel>
@@ -280,12 +212,11 @@ export default function AddUserModal({ open, handleClose }) {
                       label="Role"
                     >
                       <MenuItem value={1}>Admin</MenuItem>
-                      <MenuItem value={2}>Doctor</MenuItem>
-                      <MenuItem value={3}>Nurse</MenuItem>
+                      <MenuItem value={2}>User</MenuItem>
                     </Select>
 
-                    {errors.role && (
-                      <FormHelperText>{errors.role.message}</FormHelperText>
+                    {errors.roleId && (
+                      <FormHelperText>{errors.roleId.message}</FormHelperText>
                     )}
                   </FormControl>
                 )}
@@ -298,7 +229,7 @@ export default function AddUserModal({ open, handleClose }) {
                   <FormControl
                     variant="outlined"
                     className="!mb-5 w-full"
-                    error={!!errors.role}
+                    error={!!errors.roleId}
                   >
                     <InputLabel
                       htmlFor="outlined-adornment-password"
@@ -346,7 +277,6 @@ export default function AddUserModal({ open, handleClose }) {
             <button
               type="button"
               onClick={() => {
-                setProfilePic("");
                 reset();
                 handleClose();
               }}
