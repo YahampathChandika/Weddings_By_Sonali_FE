@@ -96,14 +96,14 @@ function SidebarComp() {
           <div className="sidebar-link">
             <MenuItem
               className={
-                selectedMenuItem === "profile" ? "selected-menu-item" : ""
+                selectedMenuItem === "inventory" ? "selected-menu-item" : ""
               }
               icon={
                 <span className="material-symbols-outlined sidebar-icon">
                   inventory_2
                 </span>
               }
-              onClick={() => handleMenuItemClick("profile")}
+              onClick={() => handleMenuItemClick("inventory")}
             >
               Inventory
             </MenuItem>

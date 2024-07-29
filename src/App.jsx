@@ -9,6 +9,7 @@ import PatientHistory from "./pages/PatientHistory";
 import NewOrder from "./pages/NewOrder";
 import Orders from "./pages/Orders";
 import TrackOrder from "./pages/TrackOrder";
+import Inventory from "./pages/Inventory";
 
 function App() {
   return (
@@ -21,8 +22,7 @@ function App() {
         <Route path="orders" element={<Orders />} />
         <Route path="users" element={<Users />} />
         <Route path="trackOrder" element={<TrackOrder />} />
-
-
+        <Route path="inventory" element={<Inventory />} />
         <Route path="admitted" element={<Admitted />} />
         <Route path="patients" element={<Orders />} />
         {/* <Route path="profile" element={<Profile />} /> */}
