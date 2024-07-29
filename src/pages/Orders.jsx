@@ -6,15 +6,21 @@ import OngoingOrdersTable from "../components/tables/OngoingOrdersTable";
 import UpcomingOrdersTable from "../components/tables/UpcomingOrdersTable";
 import PastOrdersTable from "../components/tables/PastOrdersTable";
 import { useNavigate } from "react-router-dom";
+import { useGetOrderMatricesQuery } from "../store/api/orderApi";
 
 export default function Orders() {
+  const { data: orderMatrices } = useGetOrderMatricesQuery();
   const [searchValue, setSearchValue] = useState("");
   const [orderType, setOrderType] = useState("waiting");
   const navigate = useNavigate()
-
   const handleClearSearch = () => {
     setSearchValue("");
   };
+
+  const waitingOrdersCount = orderMatrices?.payload[1]?.eventCount;
+  const upcomingOrdersCount = orderMatrices?.payload[2]?.eventCount;
+  const ongoingOrdersCount = orderMatrices?.payload[0]?.eventCount;
+  const pastOrdersCount = orderMatrices?.payload[3]?.eventCount;
 
   const orderTypeMapping = {
     waiting: { icon: "calendar_clock", title: "Waiting Orders" },
@@ -87,7 +93,7 @@ export default function Orders() {
             <Col>
               <p className="text-lg font-medium">Waiting</p>
               <p className="text-xs text-txtgray">Orders</p>
-              <p className="text-2xl text-txtblue mt-3">0</p>
+              <p className="text-2xl text-txtblue mt-3">0{waitingOrdersCount}</p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
@@ -106,7 +112,7 @@ export default function Orders() {
             <Col>
               <p className="text-lg font-medium">Ongoing</p>
               <p className="text-xs text-txtgray">Orders</p>
-              <p className="text-2xl text-txtblue mt-3">0</p>
+              <p className="text-2xl text-txtblue mt-3">0{ongoingOrdersCount}</p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
@@ -125,7 +131,7 @@ export default function Orders() {
             <Col>
               <p className="text-lg font-medium">Upcoming</p>
               <p className="text-xs text-txtgray">Orders</p>
-              <p className="text-2xl text-txtblue mt-3">0</p>
+              <p className="text-2xl text-txtblue mt-3">0{upcomingOrdersCount}</p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
@@ -144,7 +150,7 @@ export default function Orders() {
             <Col>
               <p className="text-lg font-medium">Past</p>
               <p className="text-xs text-txtgray">Orders</p>
-              <p className="text-2xl text-txtblue mt-3">0</p>
+              <p className="text-2xl text-txtblue mt-3">0{pastOrdersCount}</p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">

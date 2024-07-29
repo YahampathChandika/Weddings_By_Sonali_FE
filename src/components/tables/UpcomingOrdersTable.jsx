@@ -1,38 +1,76 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Table } from "rsuite";
+import { useGetOrdersByStateQuery } from "../../store/api/orderApi";
+import noDataImage from "../../assets/images/nodata.svg";
 
 const { Column, HeaderCell, Cell } = Table;
 
 export default function UpcomingOrdersTable() {
-  const defaultData = [
-    {
-      id: 1,
-      customer: "John Doe",
-      phone: "123-456-7890",
-      event: "Wedding",
-      eventDate: "2023-08-01",
-      eventTime: "18:00",
-      returnDate: "2023-08-02",
-    },
-    {
-      id: 2,
-      customer: "Jane Smith",
-      phone: "987-654-3210",
-      event: "Birthday",
-      eventDate: "2023-08-05",
-      eventTime: "12:00",
-      returnDate: "2023-08-06",
-    },
-    // Add more data as needed
-  ];
+  const navigate = useNavigate();
+  const { data: orders } = useGetOrdersByStateQuery(2);
+  const [sortColumn, setSortColumn] = useState("");
+  const [sortType, setSortType] = useState("");
 
-  const data = defaultData;
+  const transformedData = useMemo(
+    () =>
+      orders?.payload.map((order, index) => ({
+        index: index + 1,
+        id: order.id,
+        customer: order.customer?.name,
+        phone: order.customer?.contactNo,
+        event: order.eventName,
+        eventDate: order.eventDate,
+        eventTime: order.eventTime,
+        returnDate: order.returnDate,
+        releaseDate: order.releaseDate,
+      })) || [],
+    [orders]
+  );
+
+  const handleRowClick = (rowData) => {
+    navigate(`/home/orders/trackOrder/${rowData.id}`);
+  };
+
+  const handleSortColumn = (sortColumn, sortType) => {
+    setSortColumn(sortColumn);
+    setSortType(sortType);
+  };
+
+  const sortedData = useMemo(() => {
+    if (sortColumn && sortType) {
+      return transformedData.sort((a, b) => {
+        let result = 0;
+        if (a[sortColumn] > b[sortColumn]) {
+          result = 1;
+        } else if (a[sortColumn] < b[sortColumn]) {
+          result = -1;
+        }
+        return sortType === "asc" ? result : -result;
+      });
+    }
+    return transformedData;
+  }, [sortColumn, sortType, transformedData]);
 
   return (
-    <Table height={400} data={data}>
+    <Table
+      height={400}
+      data={sortedData}
+      onRowClick={handleRowClick}
+      sortColumn={sortColumn}
+      sortType={sortType}
+      onSortColumn={handleSortColumn}
+      rowClassName="cursor-pointer"
+      renderEmpty={() => (
+        <div className="flex flex-col items-center justify-center h-full bg-white">
+          <img src={noDataImage} alt="No Data" className="w-44 h-auto" />
+          <p className="mt-5 text-lg text-gray-600">No Orders Found!</p>
+        </div>
+      )}
+    >
       <Column flexGrow={1} align="center">
-        <HeaderCell>ID</HeaderCell>
-        <Cell dataKey="id" />
+        <HeaderCell>#</HeaderCell>
+        <Cell dataKey="index" />
       </Column>
 
       <Column flexGrow={2}>
@@ -50,22 +88,22 @@ export default function UpcomingOrdersTable() {
         <Cell dataKey="event" />
       </Column>
 
-      <Column flexGrow={2}>
+      <Column flexGrow={2} sortable>
         <HeaderCell>Event Date</HeaderCell>
         <Cell dataKey="eventDate" />
       </Column>
 
-      <Column flexGrow={2}>
+      <Column flexGrow={2} sortable>
         <HeaderCell>Event Time</HeaderCell>
         <Cell dataKey="eventTime" />
       </Column>
 
-      <Column flexGrow={2}>
+      <Column flexGrow={2} sortable>
         <HeaderCell>Release Date</HeaderCell>
-        <Cell dataKey="returnDate" />
+        <Cell dataKey="releaseDate" />
       </Column>
 
-      <Column flexGrow={2}>
+      <Column flexGrow={2} sortable>
         <HeaderCell>Return Date</HeaderCell>
         <Cell dataKey="returnDate" />
       </Column>

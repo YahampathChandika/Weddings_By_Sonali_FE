@@ -108,7 +108,7 @@ export default function OverviewTable() {
       rowClassName="cursor-pointer"
       renderEmpty={() => (
         <div className="flex flex-col items-center justify-center h-full bg-white">
-          <img src={noDataImage} alt="No Data" className="w-56 h-auto" />
+          <img src={noDataImage} alt="No Data" className="w-44 h-auto" />
           <p className="mt-5 text-lg text-txtgray">No patients available.</p>
         </div>
       )}

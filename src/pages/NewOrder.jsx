@@ -8,16 +8,11 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateField } from "@mui/x-date-pickers/DateField";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { FormHelperText } from "@mui/material";
-
 import Swal from "sweetalert2";
 import UserDetails from "../components/common/UserDetails";
 import { TimeField } from "@mui/x-date-pickers";
 import { useAddNewOrderMutation } from "../store/api/orderApi";
+import dayjs from "dayjs";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -45,13 +40,18 @@ export default function NewOrder() {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
-    try {
-      const response = await newOrder(data);
+    const formattedEventTime = dayjs(data.eventTime).format("HH:mm");
+    const newData = {
+      ...data,
+      eventTime: formattedEventTime,
+    };
 
-      if (response.data &&!response.data.error) {
+    try {
+      const response = await newOrder(newData);
+
+      if (response.data && !response.data.error) {
         reset();
-        
+
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -67,22 +67,21 @@ export default function NewOrder() {
           icon: "success",
           title: "New Order Added Successfully",
         });
-
-        } else {
-          console.log("Order adding failed", response);
-          Swal.fire({
-            title: "Oops...",
-            text:
-              response?.error?.data?.payload ||
-              response?.data?.payload ||
-              "Order adding failed",
-            icon: "error",
-          });
-        }
-      } catch (error) {
-        console.log("Order Adding Error", error);
+      } else {
+        console.log("Order adding failed", response);
+        Swal.fire({
+          title: "Oops...",
+          text:
+            response?.error?.data?.payload ||
+            response?.data?.payload ||
+            "Order adding failed",
+          icon: "error",
+        });
       }
-    };
+    } catch (error) {
+      console.log("Order Adding Error", error);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -206,9 +205,7 @@ export default function NewOrder() {
                     variant="outlined"
                     className="w-full"
                     error={!!errors.venue}
-                    helperText={
-                      errors.venue ? errors.venue.message : ""
-                    }
+                    helperText={errors.venue ? errors.venue.message : ""}
                   />
                 )}
               />
