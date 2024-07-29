@@ -1,43 +1,55 @@
-import React from "react";
-import { AutoComplete, Container, Input, InputGroup } from "rsuite";
+import React, { useState, useEffect } from "react";
+import { AutoComplete, Container, InputGroup } from "rsuite";
 import UserDetails from "../components/common/UserDetails";
-import SearchIcon from "@rsuite/icons/Search";
 import InventoryTable from "../components/tables/InventoryTable";
+import { useGetAllItemsQuery } from "../store/api/inventoryApi";
 
 function Inventory() {
-  const styles = {
-    width: 300,
-    marginBottom: 10,
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+
+  const {
+    data: getAllItems,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetAllItemsQuery();
+
+  useEffect(() => {
+    if (getAllItems?.payload) {
+      const filtered = getAllItems.payload.filter(item =>
+        item.itemName.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.id.toString().toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setFilteredItems(filtered);
+    }
+  }, [getAllItems, searchValue]);
+
+  const handleSearchChange = (value) => {
+    setSearchValue(value);
   };
+
+  const handleClearSearch = () => {
+    setSearchValue("");
+  };
+
   return (
     <Container>
       <div className="pb-10 flex justify-between">
-        <div className="flex items-center mb-5 ">
-          <span className="material-symbols-outlined sidebar-icon  text-black">
+        <div className="flex items-center mb-5">
+          <span className="material-symbols-outlined sidebar-icon text-black">
             inventory_2
           </span>
-          <p className="text-2xl font-bold ml-4  text-black">Inventory</p>
+          <p className="text-2xl font-bold ml-4 text-black">Inventory</p>
         </div>
         <UserDetails />
       </div>
       <div className="max-w-full h-20 bg-white rounded-md flex items-center justify-between mb-10">
-        <div className="ml-8 w-1/2 ">
-          <p className="text-xl font-medium  text-txtgray ">20 items Total</p>
+        <div className="ml-8 w-1/2">
+          <p className="text-xl font-medium text-txtgray">20 items Total</p>
         </div>
         <div className="flex w-1/2 justify-between">
-          {/* <div className="mr-5 w-2/3">
-            <InputGroup
-              inside
-              className="flex border-2 border-txtdarkblue  h-10 px-3 mr-5 !rounded-full items-center justify-evenly"
-            >
-              <Input />
-              <InputGroup.Button>
-                <span className="material-symbols-outlined sidebar-icon text-lg font-medium text-txtdarkblue cursor-pointer ">
-                  search
-                </span>
-              </InputGroup.Button>
-            </InputGroup>
-          </div> */}
           <div className="w-8/12">
             <InputGroup
               inside
@@ -45,20 +57,18 @@ function Inventory() {
             >
               <AutoComplete
                 placeholder="Search by Item ID or Name"
-                // data={data}
-                // value={value}
-                // onChange={handleSearchChange}
-                // onSelect={handleSelectUser}
+                value={searchValue}
+                onChange={handleSearchChange}
               />
               <InputGroup.Addon>
-                {/* {value && (
-              <span
-                className="material-symbols-outlined sidebar-icon text-lg font-medium text-red cursor-pointer mr-5"
-                onClick={handleClearSearch}
-              >
-                close
-              </span>
-            )} */}
+                {searchValue && (
+                  <span
+                    className="material-symbols-outlined sidebar-icon text-lg font-medium text-red cursor-pointer mr-5"
+                    onClick={handleClearSearch}
+                  >
+                    close
+                  </span>
+                )}
                 <span className="material-symbols-outlined sidebar-icon text-lg font-medium text-txtdarkblue cursor-pointer">
                   search
                 </span>
@@ -66,7 +76,7 @@ function Inventory() {
             </InputGroup>
           </div>
           <div className="min-w-52 flex items-center cursor-pointer">
-            <span className="material-symbols-outlined sidebar-icon text-lg font-medium text-txtdarkblue mr-3 ">
+            <span className="material-symbols-outlined sidebar-icon text-lg font-medium text-txtdarkblue mr-3">
               add_circle
             </span>
             <p className="text-lg font-medium text-txtdarkblue">Add New Item</p>
@@ -74,7 +84,7 @@ function Inventory() {
         </div>
       </div>
       <div className="flex-grow">
-        <InventoryTable />
+        <InventoryTable Items={filteredItems} />
       </div>
     </Container>
   );

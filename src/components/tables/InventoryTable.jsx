@@ -1,36 +1,51 @@
 import React from 'react'
 import { Table } from 'rsuite';
-import { mockUsers } from '../../assets/mocks/mockUsers';
+
 
 const { Column, HeaderCell, Cell } = Table;
-const data = mockUsers(100);
 
+function InventoryTable({ Items }) {
 
-
-function InventoryTable() {
+  console.log(Items);
     const [sortColumn, setSortColumn] = React.useState();
     const [sortType, setSortType] = React.useState();
     const [loading, setLoading] = React.useState(false);
   
+ 
     const getData = () => {
+      if (!Items) return [];
+      const sortedData = [...Items];
+  
       if (sortColumn && sortType) {
-        return data.sort((a, b) => {
-          let x = a[sortColumn];
-          let y = b[sortColumn];
-          if (typeof x === 'string') {
-            x = x.charCodeAt();
-          }
-          if (typeof y === 'string') {
-            y = y.charCodeAt();
-          }
-          if (sortType === 'asc') {
-            return x - y;
+        sortedData.sort((a, b) => {
+          let x, y;
+  
+          if (sortColumn === "name") {
+            x = `${a.firstName} ${a.lastName}`.toLowerCase();
+            y = `${b.firstName} ${b.lastName}`.toLowerCase();
           } else {
-            return y - x;
+            x = a[sortColumn];
+            y = b[sortColumn];
+  
+            if (typeof x === "string") {
+              x = x.toLowerCase();
+            }
+            if (typeof y === "string") {
+              y = y.toLowerCase();
+            }
           }
+  
+          if (x < y) {
+            return sortType === "asc" ? -1 : 1;
+          }
+          if (x > y) {
+            return sortType === "asc" ? 1 : -1;
+          }
+          return 0;
         });
       }
-      return data;
+  
+      return sortedData;
     };
   
     const handleSortColumn = (sortColumn, sortType) => {
@@ -59,37 +74,37 @@ function InventoryTable() {
 
       <Column width={250} fixed sortable>
         <HeaderCell>Name</HeaderCell>
-        <Cell dataKey="name" />
+        <Cell dataKey="itemName" />
       </Column>
 
       <Column width={180} sortable>
         <HeaderCell>Type</HeaderCell>
-        <Cell dataKey="gender" />
+        <Cell dataKey="type" />
       </Column>
 
       <Column width={180} sortable>
         <HeaderCell>Usage</HeaderCell>
-        <Cell dataKey="age" />
+        <Cell dataKey="usedTimes" />
       </Column>
 
       <Column width={180} sortable>
         <HeaderCell>Quantity</HeaderCell>
-        <Cell dataKey="age" />
+        <Cell dataKey="quantity" />
       </Column>
 
       <Column width={180} sortable>
         <HeaderCell>Available</HeaderCell>
-        <Cell dataKey="age" />
+        <Cell dataKey="availableunits" />
       </Column>
 
       <Column width={180} sortable>
         <HeaderCell>Demaged</HeaderCell>
-        <Cell dataKey="age" />
+        <Cell dataKey="damage" />
       </Column>
 
       <Column width={180} sortable>
         <HeaderCell>Missed</HeaderCell>
-        <Cell dataKey="age" />
+        <Cell dataKey="missing" />
       </Column>
 
       <Column flexGrow={120} sortable>
