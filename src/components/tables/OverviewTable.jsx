@@ -3,7 +3,7 @@ import { Table } from "rsuite";
 import { useGetAdmittedPatientsQuery } from "../../store/api/patientApi";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import noDataImage from "../../assets/images/doctors.svg";
+import noDataImage from "../../assets/images/nodata.svg";
 
 export default function OverviewTable() {
   const [sortColumn, setSortColumn] = useState();
@@ -109,7 +109,7 @@ export default function OverviewTable() {
       renderEmpty={() => (
         <div className="flex flex-col items-center justify-center h-full bg-white">
           <img src={noDataImage} alt="No Data" className="w-44 h-auto" />
-          <p className="mt-5 text-lg text-txtgray">No patients available.</p>
+          <p className="mt-5 text-lg text-txtgray">No orders available.</p>
         </div>
       )}
     >

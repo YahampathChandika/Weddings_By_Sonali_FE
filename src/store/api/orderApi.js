@@ -20,6 +20,12 @@ export const orderApi = api.injectEndpoints({
     getOrderMatrices: builder.query({
       query: () => "order/getOrderMatrices",
     }),
+
+    getOrderById: builder.query({
+      query: (orderId) => `order/getOrderById/${orderId}`,
+    }),
+
+
   }),
 });
 
@@ -27,4 +33,5 @@ export const {
   useAddNewOrderMutation,
   useGetOrdersByStateQuery,
   useGetOrderMatricesQuery,
+  useGetOrderByIdQuery,
 } = orderApi;

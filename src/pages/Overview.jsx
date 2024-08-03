@@ -5,11 +5,32 @@ import OverviewPieChart from "../components/charts/OverviewPieChart";
 import OverviewTable from "../components/tables/OverviewTable";
 import { useGetSignedUserQuery } from "../store/api/userApi";
 import UserDetails from "../components/common/UserDetails";
+import {
+  useGetOrderMatricesQuery,
+  useGetOrdersByStateQuery,
+} from "../store/api/orderApi";
+import OngoingOrdersTable from "../components/tables/OngoingOrdersTable";
 
 export default function Overview() {
-
+  const { data: orderMatrices } = useGetOrderMatricesQuery();
+  const { data: pastOrders } = useGetOrdersByStateQuery(4);
   const { data: signedUser } = useGetSignedUserQuery();
   const user = signedUser?.payload;
+
+  const now = new Date();
+  const thisMonthPastOrders = pastOrders?.payload.filter((order) => {
+    const createdAt = new Date(order.createdAt);
+    return (
+      createdAt >= new Date(now.getFullYear(), now.getMonth(), 1) &&
+      createdAt <= new Date(now.getFullYear(), now.getMonth() + 1, 0)
+    );
+  });
+
+  const pastOrdersCount = thisMonthPastOrders?.length;
+  const ongoingOrdersCount = orderMatrices?.payload[0]?.eventCount;
+  const waitingOrdersCount = orderMatrices?.payload[1]?.eventCount;
+  const upcomingOrdersCount = orderMatrices?.payload[2]?.eventCount;
+
   return (
     <Container className="w-full">
       <Row className="pb-10 flex justify-between">
@@ -22,7 +43,7 @@ export default function Overview() {
             Check the latest updates on your account
           </p>
         </Col>
-        <UserDetails/>
+        <UserDetails />
       </Row>
 
       <Row className="flex">
@@ -30,24 +51,24 @@ export default function Overview() {
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
             <p className="text-lg font-medium">New Orders</p>
             <p className="text-xs text-txtgray">This month</p>
-            <p className="text-2xl text-txtblue mt-3">0</p>
+            <p className="text-2xl text-txtblue mt-3">0{waitingOrdersCount}</p>
           </Row>
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 mt-8 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
             <p className="text-lg font-medium">Ongoing</p>
             <p className="text-xs text-txtgray">Orders</p>
-            <p className="text-2xl text-txtblue mt-3">10</p>
+            <p className="text-2xl text-txtblue mt-3">0{ongoingOrdersCount}</p>
           </Row>
         </Col>
         <Col className="mr-8 w-2/12">
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
             <p className="text-lg font-medium">Upcoming</p>
             <p className="text-xs text-txtgray">Orders</p>
-            <p className="text-2xl text-txtblue mt-3">03</p>
+            <p className="text-2xl text-txtblue mt-3">0{upcomingOrdersCount}</p>
           </Row>
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 mt-8 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
             <p className="text-lg font-medium">Completed</p>
             <p className="text-xs text-txtgray">This month</p>
-            <p className="text-2xl text-txtblue mt-3">01</p>
+            <p className="text-2xl text-txtblue mt-3">0{pastOrdersCount}</p>
           </Row>
         </Col>
 
@@ -64,7 +85,8 @@ export default function Overview() {
       <Row className="bg-white h-96 rounded-md mt-8 flex flex-col">
         <p className="text-lg p-5 font-medium">Orders</p>
         <div className="flex-grow">
-          <OverviewTable />
+          {/* <OverviewTable /> */}
+          <OngoingOrdersTable />
         </div>
       </Row>
     </Container>

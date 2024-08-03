@@ -16,10 +16,10 @@ export default function Orders() {
   const handleClearSearch = () => {
     setSearchValue("");
   };
-
+  
+  const ongoingOrdersCount = orderMatrices?.payload[0]?.eventCount;
   const waitingOrdersCount = orderMatrices?.payload[1]?.eventCount;
   const upcomingOrdersCount = orderMatrices?.payload[2]?.eventCount;
-  const ongoingOrdersCount = orderMatrices?.payload[0]?.eventCount;
   const pastOrdersCount = orderMatrices?.payload[3]?.eventCount;
 
   const orderTypeMapping = {
