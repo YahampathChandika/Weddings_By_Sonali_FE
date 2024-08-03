@@ -18,8 +18,8 @@ export default function Orders() {
   };
   
   const ongoingOrdersCount = orderMatrices?.payload[0]?.eventCount;
-  const waitingOrdersCount = orderMatrices?.payload[1]?.eventCount;
-  const upcomingOrdersCount = orderMatrices?.payload[2]?.eventCount;
+  const upcomingOrdersCount = orderMatrices?.payload[1]?.eventCount;
+  const waitingOrdersCount = orderMatrices?.payload[2]?.eventCount;
   const pastOrdersCount = orderMatrices?.payload[3]?.eventCount;
 
   const orderTypeMapping = {

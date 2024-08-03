@@ -13,10 +13,29 @@ export const eventItemsApi = api.injectEndpoints({
       },
     }),
 
-    getItemById: builder.query({
-      query: (itemId) => `item/getItemById/${itemId}`,
+    getEventItemsById: builder.query({
+      query: (eventId) => `eventItems/getEventItemsById/${eventId}`,
+    }),
+
+    releaseEventItems: builder.mutation({
+      query: (data) => {
+        return {
+          url: "eventItems/releaseEventItems",
+          method: "POST",
+          body: data,
+        };
+      },
+    }),
+
+    getReturnItemsList: builder.query({
+      query: (eventId) => `eventItems/getReturnItemsList/${eventId}`,
     }),
   }),
 });
 
-export const { useAddEventItemsMutation, useGetItemByIdQuery } = eventItemsApi;
+export const {
+  useAddEventItemsMutation,
+  useGetEventItemsByIdQuery,
+  useReleaseEventItemsMutation,
+  useGetReturnItemsListQuery
+} = eventItemsApi;

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import { Table, Button, AutoComplete, InputGroup } from "rsuite";
+import { useGetReturnItemsListQuery } from "../../store/api/eventItemsApi";
 const { Column, HeaderCell, Cell } = Table;
 
 const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
@@ -22,38 +24,12 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
 };
 
 export default function Return() {
-  const defaultData = [
-    {
-      id: 1,
-      code: "A001",
-      name: "Item 1",
-      type: "Type A",
-      released: 10,
-      returned: null,
-      damaged: null,
-    },
-    {
-      id: 2,
-      code: "A002",
-      name: "Item 2",
-      type: "Type B",
-      released: 20,
-      returned: null,
-      damaged: null,
-    },
-    {
-      id: 3,
-      code: "A003",
-      name: "Item 3",
-      type: "Type C",
-      released: 30,
-      returned: null,
-      damaged: null,
-    },
-    // Add more data as needed
-  ];
+  const { orderId } = useParams();
+  const { data: returnItemsData } = useGetReturnItemsListQuery(orderId);
+  const returnItems = returnItemsData?.payload;
+  const [data, setData] = useState(returnItems);
 
-  const [data, setData] = useState(defaultData);
+  console.log("data", returnItems);
 
   const handleEditState = (id) => {
     const nextData = data.map((item) => {
@@ -106,24 +82,33 @@ export default function Return() {
       </div>
 
       <Table height={300} data={data} id="table" rowHeight={55}>
+        <Column flexGrow={1} align="center" fixed>
+          <HeaderCell>#</HeaderCell>
+          <Cell>
+            {(rowData, rowIndex) => {
+              return <span>{rowIndex + 1}</span>;
+            }}
+          </Cell>
+        </Column>
+
         <Column flexGrow={2} align="center">
           <HeaderCell>Code</HeaderCell>
           <Cell dataKey="code" />
         </Column>
 
-        <Column flexGrow={2}>
+        <Column flexGrow={3}>
           <HeaderCell>Name</HeaderCell>
-          <Cell dataKey="name" />
+          <Cell dataKey="itemName" />
         </Column>
 
-        <Column flexGrow={2}>
+        <Column flexGrow={3}>
           <HeaderCell>Type</HeaderCell>
           <Cell dataKey="type" />
         </Column>
 
         <Column flexGrow={2}>
           <HeaderCell>Released</HeaderCell>
-          <Cell dataKey="released" />
+          <Cell dataKey="quantity" />
         </Column>
 
         <Column flexGrow={2}>
@@ -136,7 +121,7 @@ export default function Return() {
           <EditableCell dataKey="damaged" onChange={handleChange} />
         </Column>
 
-        <Column flexGrow={2}>
+        <Column flexGrow={2} align="center">
           <HeaderCell>Missing</HeaderCell>
           <Cell>
             {(rowData) => {
@@ -147,7 +132,7 @@ export default function Return() {
           </Cell>
         </Column>
 
-        <Column flexGrow={1} align="left">
+        <Column flexGrow={1} align="center">
           <HeaderCell>Action</HeaderCell>
           <Cell>
             {(rowData) => (

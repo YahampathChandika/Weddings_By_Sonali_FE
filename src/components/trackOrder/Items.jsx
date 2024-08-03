@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import { Table, Button, AutoComplete, InputGroup } from "rsuite";
+import React, { useState, useEffect } from "react";
+import { Table, AutoComplete, InputGroup } from "rsuite";
 import { useGetAllItemsQuery } from "../../store/api/inventoryApi";
 import noDataImage from "../../assets/images/nodata.svg";
 import Swal from "sweetalert2";
-import { useAddEventItemsMutation } from "../../store/api/eventItemsApi";
+import {
+  useAddEventItemsMutation,
+  useGetEventItemsByIdQuery,
+} from "../../store/api/eventItemsApi";
 import { useParams } from "react-router-dom";
 
 const { Column, HeaderCell, Cell } = Table;
@@ -65,14 +68,31 @@ const ActionCell = ({
 };
 
 export default function Items() {
-  const [data, setData] = useState([]);
+  const { orderId } = useParams();
   const [value, setValue] = useState("");
+  const { data: eventItems } = useGetEventItemsByIdQuery(orderId);
+  const [data, setData] = useState([]);
   const { data: allItemsData } = useGetAllItemsQuery();
   const [addEventItems] = useAddEventItemsMutation();
-  const { orderId } = useParams();
   const allItems = allItemsData?.payload?.map((item) => {
     return `${item.id} | ${item.itemName} | ${item.availableunits}`;
   });
+
+  useEffect(() => {
+    if (eventItems?.payload) {
+      const updatedEventItems = eventItems.payload.map((item) => ({
+        id: item.itemId,
+        code: item.code,
+        name: item.name,
+        type: item.type,
+        usage: item.usage,
+        available: item.available,
+        quantity: item.quantity,
+        status: null,
+      }));
+      setData(updatedEventItems);
+    }
+  }, [eventItems]);
 
   const handleSearchChange = (searchValue) => {
     setValue(searchValue);
@@ -83,6 +103,10 @@ export default function Items() {
     const selectedItemData = allItemsData.payload.find(
       (item) => item.id.toString() === selectedItemId
     );
+
+    if (!selectedItemData) {
+      return;
+    }
 
     // Check if the item is already in the data array
     const itemExists = data.some(
@@ -97,19 +121,18 @@ export default function Items() {
       return;
     }
 
-    if (selectedItemData) {
-      const newItem = {
-        id: selectedItemData.id,
-        code: selectedItemData.code,
-        name: selectedItemData.itemName,
-        type: selectedItemData.type,
-        usage: selectedItemData.usedTimes,
-        available: selectedItemData.availableunits,
-        quantity: null,
-      };
-      setValue("");
-      setData([...data, newItem]);
-    }
+    const newItem = {
+      id: selectedItemData.id,
+      code: selectedItemData.code,
+      name: selectedItemData.itemName,
+      type: selectedItemData.type,
+      usage: selectedItemData.usedTimes,
+      available: selectedItemData.availableunits,
+      quantity: null,
+      status: null,
+    };
+    setValue("");
+    setData([...data, newItem]);
   };
 
   const handleClearSearch = () => {
@@ -117,15 +140,22 @@ export default function Items() {
   };
 
   const handleChange = (id, key, value) => {
-    const nextData = Object.assign([], data);
-    nextData.find((item) => item.id === id)[key] = value;
+    const nextData = data.map((item) => {
+      if (item.id === id) {
+        return { ...item, [key]: value };
+      }
+      return item;
+    });
     setData(nextData);
   };
 
   const handleEditState = (id) => {
-    const nextData = Object.assign([], data);
-    const activeItem = nextData.find((item) => item.id === id);
-    activeItem.status = activeItem.status ? null : "EDIT";
+    const nextData = data.map((item) => {
+      if (item.id === id) {
+        return { ...item, status: item.status ? null : "EDIT" };
+      }
+      return item;
+    });
     setData(nextData);
   };
 
@@ -143,8 +173,6 @@ export default function Items() {
       eventId: orderId,
       items: items,
     };
-
-    console.log(payload);
 
     try {
       const response = await addEventItems(payload);

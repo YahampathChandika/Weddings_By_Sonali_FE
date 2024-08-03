@@ -1,16 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Table, Checkbox } from "rsuite";
+import {
+  useGetEventItemsByIdQuery,
+  useReleaseEventItemsMutation,
+} from "../../store/api/eventItemsApi";
+import Swal from "sweetalert2";
 
 const { Column, HeaderCell, Cell } = Table;
-
-const defaultData = [
-  { id: 1, code: "A001", name: "Item 1", type: "Type A", quantity: 10 },
-  { id: 2, code: "A002", name: "Item 2", type: "Type B", quantity: 20 },
-  { id: 3, code: "A003", name: "Item 3", type: "Type B", quantity: 15 },
-  { id: 4, code: "A004", name: "Item 4", type: "Type C", quantity: 25 },
-  { id: 5, code: "A005", name: "Item 5", type: "Type A", quantity: 30 },
-  // Add more data as needed
-];
 
 const CheckCell = ({ rowData, onChange, checkedKeys, dataKey, ...props }) => (
   <Cell {...props} style={{ padding: 0 }}>
@@ -27,11 +24,26 @@ const CheckCell = ({ rowData, onChange, checkedKeys, dataKey, ...props }) => (
 );
 
 export default function Release() {
+  const { orderId } = useParams();
+  const { data: eventItems } = useGetEventItemsByIdQuery(orderId);
   const [checkedKeys, setCheckedKeys] = useState([]);
-  const data = defaultData;
+  const [releaseEventItems] = useReleaseEventItemsMutation();
+
+  console.log("eventItems", eventItems);
+
+  useEffect(() => {
+    if (eventItems && eventItems.payload) {
+      const initialCheckedKeys = eventItems.payload
+        .filter((item) => item.isSelect === 1)
+        .map((item) => item.itemId);
+      setCheckedKeys(initialCheckedKeys);
+    }
+  }, [eventItems]);
+
+  const data = eventItems?.payload || [];
 
   const handleCheckAll = (value, checked) => {
-    const keys = checked ? data.map((item) => item.id) : [];
+    const keys = checked ? data.map((item) => item.itemId) : [];
     setCheckedKeys(keys);
   };
 
@@ -46,6 +58,56 @@ export default function Release() {
   const indeterminate =
     checkedKeys.length > 0 && checkedKeys.length < data.length;
 
+  const handleSave = async () => {
+    const items = data.map((item) => ({
+      itemId: item.itemId,
+      isSelect: checkedKeys.includes(item.itemId) ? 1 : 0,
+    }));
+
+    const payload = {
+      eventId: orderId,
+      items: items,
+    };
+
+    console.log("Saving order", payload);
+
+    try {
+      const response = await releaseEventItems(payload);
+      if (response.error) {
+        console.log("Failed to release event items", response);
+        Swal.fire({
+          title: "Oops...",
+          text:
+            response?.error?.data?.payload ||
+            response?.data?.payload ||
+            "Failed to release event items",
+          icon: "error",
+        });
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Event items released successfully",
+        });
+      }
+    } catch (error) {
+      console.log("Failed to release event items", error);
+      Swal.fire({
+        title: "Failed to release event items",
+        icon: "error",
+      });
+    }
+  };
   return (
     <div className="w-full">
       <p className="font-bold text-black text-2xl mb-5">Item Checklist</p>
@@ -64,7 +126,7 @@ export default function Release() {
             </div>
           </HeaderCell>
           <CheckCell
-            dataKey="id"
+            dataKey="itemId"
             checkedKeys={checkedKeys}
             onChange={handleCheck}
           />
@@ -97,7 +159,10 @@ export default function Release() {
       `}</style>
 
       <div className="flex justify-end mt-5">
-        <button className="w-60 h-10 bg-txtdarkblue text-white p-4 text-lg flex items-center justify-center  rounded-md">
+        <button
+          className="w-60 h-10 bg-txtdarkblue text-white p-4 text-lg flex items-center justify-center rounded-md"
+          onClick={handleSave}
+        >
           Save
         </button>
       </div>
