@@ -20,7 +20,7 @@ function App() {
         <Route path="overview" element={<Overview />} />
         <Route path="newOrder" element={<NewOrder />} />
         <Route path="orders" element={<Orders />} />
-        <Route path="orders/trackOrder/:id" element={<TrackOrder />} />
+        <Route path="orders/trackOrder/:orderId" element={<TrackOrder />} />
         <Route path="users" element={<Users />} />
         <Route path="inventory" element={<Inventory />} />
         {/* <Route path="admitted" element={<Admitted />} /> */}

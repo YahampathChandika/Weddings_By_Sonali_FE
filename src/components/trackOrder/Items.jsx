@@ -1,46 +1,13 @@
 import React, { useState } from "react";
 import { Table, Button, AutoComplete, InputGroup } from "rsuite";
+import {
+  useGetAllItemsQuery,
+  useGetItemByIdQuery,
+} from "../../store/api/inventoryApi";
+import noDataImage from "../../assets/images/nodata.svg";
+import Swal from "sweetalert2";
 
 const { Column, HeaderCell, Cell } = Table;
-
-const defaultData = [
-  {
-    id: 1,
-    code: "A001",
-    name: "Item 1",
-    type: "Type A",
-    usage: "05",
-    available: "Yes",
-    quantity: 10,
-  },
-  {
-    id: 2,
-    code: "A002",
-    name: "Item 2",
-    type: "Type B",
-    usage: "10",
-    available: "No",
-    quantity: 20,
-  },
-  {
-    id: 2,
-    code: "A002",
-    name: "Item 2",
-    type: "Type B",
-    usage: "10",
-    available: "No",
-    quantity: 20,
-  },
-  {
-    id: 2,
-    code: "A002",
-    name: "Item 2",
-    type: "Type B",
-    usage: "10",
-    available: "No",
-    quantity: 20,
-  },
-];
 
 const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
   const editing = rowData.status === "EDIT";
@@ -61,14 +28,20 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
   );
 };
 
-const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
+const ActionCell = ({
+  rowData,
+  dataKey,
+  onEditClick,
+  onDeleteClick,
+  ...props
+}) => {
   return (
     <Cell {...props} style={{ padding: "6px" }}>
       <div className="flex">
         <div
           className="flex"
           onClick={() => {
-            onClick(rowData.id);
+            onEditClick(rowData.id);
           }}
         >
           {rowData.status === "EDIT" ? (
@@ -81,7 +54,10 @@ const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
             </span>
           )}
         </div>
-        <span className="material-symbols-outlined sidebar-icon text-xl font-medium text-red cursor-pointer ml-4">
+        <span
+          className="material-symbols-outlined sidebar-icon text-xl font-medium text-red cursor-pointer ml-4"
+          onClick={() => onDeleteClick(rowData.id)}
+        >
           delete
         </span>
       </div>
@@ -90,7 +66,55 @@ const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
 };
 
 export default function Items() {
-  const [data, setData] = useState(defaultData);
+  const [data, setData] = useState([]);
+  const [value, setValue] = useState("");
+  const { data: allItemsData } = useGetAllItemsQuery();
+
+  const allItems = allItemsData?.payload?.map((item) => {
+    return `${item.id} | ${item.itemName} | ${item.availableunits}`;
+  });
+
+  const handleSearchChange = (searchValue) => {
+    setValue(searchValue);
+  };
+
+  const handleSelectItem = (selectedItem) => {
+    const selectedItemId = selectedItem.split(" | ")[0];
+    const selectedItemData = allItemsData.payload.find(
+      (item) => item.id.toString() === selectedItemId
+    );
+
+    // Check if the item is already in the data array
+    const itemExists = data.some(
+      (item) => item.id.toString() === selectedItemId
+    );
+
+    if (itemExists) {
+      Swal.fire({
+        title: "Item is already added.",
+        icon: "warning"
+      });
+      return;
+    }
+
+    if (selectedItemData) {
+      const newItem = {
+        id: selectedItemData.id,
+        code: selectedItemData.code,
+        name: selectedItemData.itemName,
+        type: selectedItemData.type,
+        usage: selectedItemData.usedTimes,
+        available: selectedItemData.availableunits,
+        quantity: selectedItemData.quantity,
+      };
+      setValue("");
+      setData([...data, newItem]);
+    }
+  };
+
+  const handleClearSearch = () => {
+    setValue("");
+  };
 
   const handleChange = (id, key, value) => {
     const nextData = Object.assign([], data);
@@ -105,6 +129,11 @@ export default function Items() {
     setData(nextData);
   };
 
+  const handleDeleteItem = (id) => {
+    const nextData = data.filter((item) => item.id !== id);
+    setData(nextData);
+  };
+
   return (
     <div className="w-full">
       <div className="w-4/12 mb-4">
@@ -114,20 +143,20 @@ export default function Items() {
         >
           <AutoComplete
             placeholder="Search Items"
-            // data={data}
-            // value={value}
-            // onChange={handleSearchChange}
-            // onSelect={handleSelectUser}
+            data={allItems}
+            value={value}
+            onChange={handleSearchChange}
+            onSelect={handleSelectItem}
           />
           <InputGroup.Addon>
-            {/* {value && (
+            {value && (
               <span
                 className="material-symbols-outlined sidebar-icon text-lg font-medium text-red cursor-pointer mr-5"
                 onClick={handleClearSearch}
               >
                 close
               </span>
-            )} */}
+            )}
             <span className="material-symbols-outlined sidebar-icon text-lg font-medium text-txtdarkblue cursor-pointer">
               search
             </span>
@@ -135,40 +164,66 @@ export default function Items() {
         </InputGroup>
       </div>
 
-      <Table height={420} data={data} rowHeight={55}>
-        <Column flexGrow={1}>
+      <Table
+        height={420}
+        data={data}
+        rowHeight={55}
+        renderEmpty={() => (
+          <div className="flex flex-col items-center justify-center h-full bg-white">
+            <img src={noDataImage} alt="No Data" className="w-44 h-auto" />
+            <p className="mt-5 text-lg text-red">No Items Added!</p>
+            <p className="mt-2 text-lg text-gray-600">
+              Search and select items to add.
+            </p>
+          </div>
+        )}
+      >
+        <Column flexGrow={1} align="center" fixed sortable>
+          <HeaderCell>#</HeaderCell>
+          <Cell>
+            {(rowData, rowIndex) => {
+              return <span>{rowIndex + 1}</span>;
+            }}
+          </Cell>
+        </Column>
+
+        <Column flexGrow={2}>
           <HeaderCell align="center">Code</HeaderCell>
           <Cell align="center" dataKey="code" />
         </Column>
 
-        <Column flexGrow={1}>
+        <Column flexGrow={4}>
           <HeaderCell>Name</HeaderCell>
           <Cell dataKey="name" />
         </Column>
 
-        <Column flexGrow={1}>
+        <Column flexGrow={4}>
           <HeaderCell>Type</HeaderCell>
           <Cell dataKey="type" />
         </Column>
 
-        <Column flexGrow={1}>
+        <Column flexGrow={2}>
           <HeaderCell>Usage</HeaderCell>
           <Cell dataKey="usage" />
         </Column>
 
-        <Column flexGrow={1}>
+        <Column flexGrow={2}>
           <HeaderCell>Available</HeaderCell>
           <Cell dataKey="available" />
         </Column>
 
-        <Column flexGrow={1}>
+        <Column flexGrow={2}>
           <HeaderCell>Quantity</HeaderCell>
           <EditableCell dataKey="quantity" onChange={handleChange} />
         </Column>
 
-        <Column flexGrow={1}>
+        <Column flexGrow={2}>
           <HeaderCell>Action</HeaderCell>
-          <ActionCell dataKey="id" onClick={handleEditState} />
+          <ActionCell
+            dataKey="id"
+            onEditClick={handleEditState}
+            onDeleteClick={handleDeleteItem}
+          />
         </Column>
       </Table>
       <div className="flex justify-end space-x-10">

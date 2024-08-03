@@ -1,7 +1,12 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import { Divider } from "rsuite";
+import { useGetOrderByIdQuery } from "../../store/api/orderApi";
 
 export default function Details() {
+  const { orderId } = useParams();
+  const { data } = useGetOrderByIdQuery(orderId);
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center">
@@ -17,19 +22,23 @@ export default function Details() {
         </div>
         <div className="flex-col w-4/12">
           <p className="text-txtgray font-medium text-lg">Name</p>
-          <p className="text-black font-medium text-xl mt-2">Pathum Nissanka</p>
+          <p className="text-black font-medium text-xl mt-2">
+            {data?.payload?.customer?.name}
+          </p>
           <p className="text-txtgray font-medium text-lg mt-5">Address</p>
           <p className="text-black font-medium text-xl mt-2">
-            221'B, Colombo 7.
+            {data?.payload?.customer?.address}
           </p>
         </div>
-        <div className="flex-col w-3/12">
-          <p className="text-txtgray font-medium text-lg">ID</p>
-          <p className="text-black font-medium text-xl mt-2">2000123487654</p>
-        </div>
-        <div className="flex-col w-1/12">
-          <p className="text-txtgray font-medium text-lg">Contact</p>
-          <p className="text-black font-medium text-xl mt-2">779817119</p>
+        <div className="flex-col w-4/12">
+          <p className="text-txtgray font-medium text-lg">NIC</p>
+          <p className="text-black font-medium text-xl mt-2">
+            {data?.payload?.customer?.nic}
+          </p>
+          <p className="text-txtgray font-medium text-lg mt-5">Contact No</p>
+          <p className="text-black font-medium text-xl mt-2">
+            {data?.payload?.customer?.contactNo}
+          </p>
         </div>
       </div>
       <Divider className="text-txtgray w-full !my-10" />
@@ -39,23 +48,23 @@ export default function Details() {
         </div>
         <div className="flex-col w-4/12">
           <p className="text-txtgray font-medium text-lg">Event Name</p>
-          <p className="text-black font-medium text-xl mt-2">Pathum Nissanka</p>
+          <p className="text-black font-medium text-xl mt-2">{data?.payload?.eventName}</p>
           <p className="text-txtgray font-medium text-lg mt-5">Event Time</p>
-          <p className="text-black font-medium text-xl mt-2">18.00</p>
+          <p className="text-black font-medium text-xl mt-2">{data?.payload?.eventTime}</p>
           <p className="text-txtgray font-medium text-lg mt-5">Notes</p>
           <p className="text-black font-medium text-xl mt-2">No notes</p>
         </div>
         <div className="flex-col w-3/12">
           <p className="text-txtgray font-medium text-lg">Venue</p>
-          <p className="text-black font-medium text-xl mt-2">2000123487654</p>
+          <p className="text-black font-medium text-xl mt-2">{data?.payload?.venue}</p>
           <p className="text-txtgray font-medium text-lg mt-5">Return Date</p>
-          <p className="text-black font-medium text-xl mt-2">21/08/2024</p>
+          <p className="text-black font-medium text-xl mt-2">{data?.payload?.returnDate}</p>
         </div>
         <div className="flex-col w-1/12">
-          <p className="text-txtgray font-medium text-lg">Date</p>
-          <p className="text-black font-medium text-xl mt-2">779817119</p>
+          <p className="text-txtgray font-medium text-lg">Event Date</p>
+          <p className="text-black font-medium text-xl mt-2">{data?.payload?.eventDate}</p>
           <p className="text-txtgray font-medium text-lg mt-5">Pax</p>
-          <p className="text-black font-medium text-xl mt-2">250</p>
+          <p className="text-black font-medium text-xl mt-2">{data?.payload?.pax}</p>
         </div>
       </div>
     </div>
