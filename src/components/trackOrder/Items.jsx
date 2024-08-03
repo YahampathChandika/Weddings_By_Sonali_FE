@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Table, Button, AutoComplete, InputGroup } from "rsuite";
-import {
-  useGetAllItemsQuery,
-  useGetItemByIdQuery,
-} from "../../store/api/inventoryApi";
+import { useGetAllItemsQuery } from "../../store/api/inventoryApi";
 import noDataImage from "../../assets/images/nodata.svg";
 import Swal from "sweetalert2";
+import { useAddEventItemsMutation } from "../../store/api/eventItemsApi";
+import { useParams } from "react-router-dom";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -69,7 +68,8 @@ export default function Items() {
   const [data, setData] = useState([]);
   const [value, setValue] = useState("");
   const { data: allItemsData } = useGetAllItemsQuery();
-
+  const [addEventItems] = useAddEventItemsMutation();
+  const { orderId } = useParams();
   const allItems = allItemsData?.payload?.map((item) => {
     return `${item.id} | ${item.itemName} | ${item.availableunits}`;
   });
@@ -92,7 +92,7 @@ export default function Items() {
     if (itemExists) {
       Swal.fire({
         title: "Item is already added.",
-        icon: "warning"
+        icon: "warning",
       });
       return;
     }
@@ -105,7 +105,7 @@ export default function Items() {
         type: selectedItemData.type,
         usage: selectedItemData.usedTimes,
         available: selectedItemData.availableunits,
-        quantity: selectedItemData.quantity,
+        quantity: null,
       };
       setValue("");
       setData([...data, newItem]);
@@ -132,6 +132,57 @@ export default function Items() {
   const handleDeleteItem = (id) => {
     const nextData = data.filter((item) => item.id !== id);
     setData(nextData);
+  };
+
+  const handleSave = async () => {
+    const items = data.map((item) => ({
+      itemId: item.id,
+      quantity: item.quantity,
+    }));
+    const payload = {
+      eventId: orderId,
+      items: items,
+    };
+
+    console.log(payload);
+
+    try {
+      const response = await addEventItems(payload);
+
+      if (response.error) {
+        console.log("Items adding failed", response);
+        Swal.fire({
+          title: "Oops...",
+          text:
+            response?.error?.data?.payload ||
+            response?.data?.payload ||
+            "Items adding failed",
+          icon: "error",
+        });
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Items Added Successfully",
+        });
+      }
+    } catch (error) {
+      console.log("Items Adding Error", error);
+      Swal.fire({
+        title: "Error saving items",
+        icon: "error",
+      });
+    }
   };
 
   return (
@@ -230,7 +281,10 @@ export default function Items() {
         <button className="w-48 h-10 bg-green text-white p-4 text-lg flex items-center justify-center  rounded-md">
           PDF
         </button>
-        <button className="w-48 h-10 bg-txtdarkblue text-white p-4 text-lg flex items-center justify-center  rounded-md">
+        <button
+          className="w-48 h-10 bg-txtdarkblue text-white p-4 text-lg flex items-center justify-center  rounded-md"
+          onClick={handleSave}
+        >
           Save
         </button>
       </div>
