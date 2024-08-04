@@ -6,8 +6,9 @@ import Swal from "sweetalert2";
 import {
   useAddEventItemsMutation,
   useGetEventItemsByIdQuery,
+  useGetReleaseItemListQuery,
 } from "../../store/api/eventItemsApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -69,8 +70,10 @@ const ActionCell = ({
 
 export default function Items() {
   const { orderId } = useParams();
+  const navigate = useNavigate();
   const [value, setValue] = useState("");
-  const { data: eventItems } = useGetEventItemsByIdQuery(orderId);
+  const { data: eventItems, refetch: refetchEventItems } = useGetEventItemsByIdQuery(orderId);
+  const { refetch: refetchReleaseItems } = useGetReleaseItemListQuery(orderId);
   const [data, setData] = useState([]);
   const { data: allItemsData } = useGetAllItemsQuery();
   const [addEventItems] = useAddEventItemsMutation();
@@ -203,6 +206,9 @@ export default function Items() {
           icon: "success",
           title: "Items Added Successfully",
         });
+        refetchReleaseItems();
+        refetchEventItems();
+        navigate(`/home/orders/trackOrder/${orderId}/release`);
       }
     } catch (error) {
       console.log("Items Adding Error", error);

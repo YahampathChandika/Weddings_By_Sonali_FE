@@ -28,7 +28,7 @@ export default function WaitingOrdersTable() {
   );
 
   const handleRowClick = (rowData) => {
-    navigate(`/home/orders/trackOrder/${rowData.id}`);
+    navigate(`/home/orders/trackOrder/${rowData.id}/details`);
   };
 
   const handleSortColumn = (sortColumn, sortType) => {

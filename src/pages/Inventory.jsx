@@ -3,10 +3,14 @@ import { AutoComplete, Container, InputGroup } from "rsuite";
 import UserDetails from "../components/common/UserDetails";
 import InventoryTable from "../components/tables/InventoryTable";
 import { useGetAllItemsQuery } from "../store/api/inventoryApi";
+import AddInventoryModal from "../components/modals/AddInventory";
 
 function Inventory() {
   const [filteredItems, setFilteredItems] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
 
   const {
     data: getAllItems,
@@ -18,9 +22,10 @@ function Inventory() {
 
   useEffect(() => {
     if (getAllItems?.payload) {
-      const filtered = getAllItems.payload.filter(item =>
-        item.itemName.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.id.toString().toLowerCase().includes(searchValue.toLowerCase())
+      const filtered = getAllItems.payload.filter(
+        (item) =>
+          item.itemName.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.id.toString().toLowerCase().includes(searchValue.toLowerCase())
       );
       setFilteredItems(filtered);
     }
@@ -75,7 +80,10 @@ function Inventory() {
               </InputGroup.Addon>
             </InputGroup>
           </div>
-          <div className="min-w-52 flex items-center cursor-pointer">
+          <div
+            className="min-w-52 flex items-center cursor-pointer"
+            onClick={handleModalOpen}
+          >
             <span className="material-symbols-outlined sidebar-icon text-lg font-medium text-txtdarkblue mr-3">
               add_circle
             </span>
@@ -86,6 +94,7 @@ function Inventory() {
       <div className="flex-grow">
         <InventoryTable Items={filteredItems} />
       </div>
+      <AddInventoryModal open={modalOpen} handleClose={handleModalClose} />
     </Container>
   );
 }

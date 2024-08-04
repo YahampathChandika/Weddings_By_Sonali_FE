@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Table, Button, AutoComplete, InputGroup } from "rsuite";
-import { useGetReturnItemsListQuery } from "../../store/api/eventItemsApi";
+import {
+  useGetReturnItemsListQuery,
+  useReturnEventItemsMutation,
+} from "../../store/api/eventItemsApi";
+import Swal from "sweetalert2";
+
 const { Column, HeaderCell, Cell } = Table;
 
 const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
@@ -13,7 +18,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
           className="rs-input"
           defaultValue={rowData[dataKey]}
           onChange={(event) => {
-            onChange && onChange(rowData.id, dataKey, event.target.value);
+            onChange && onChange(rowData.itemId, dataKey, event.target.value);
           }}
         />
       ) : (
@@ -24,16 +29,22 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
 };
 
 export default function Return() {
+  const [returnEventItems] = useReturnEventItemsMutation();
   const { orderId } = useParams();
-  const { data: returnItemsData } = useGetReturnItemsListQuery(orderId);
+  const { data: returnItemsData, refetch: refetchReturnList } =
+    useGetReturnItemsListQuery(orderId);
   const returnItems = returnItemsData?.payload;
-  const [data, setData] = useState(returnItems);
+  const [data, setData] = useState([]);
 
-  console.log("data", returnItems);
+  useEffect(() => {
+    if (returnItems) {
+      setData(returnItems.map((item) => ({ ...item, status: null })));
+    }
+  }, [returnItems]);
 
   const handleEditState = (id) => {
     const nextData = data.map((item) => {
-      if (item.id === id) {
+      if (item.itemId === id) {
         return { ...item, status: item.status ? null : "EDIT" };
       }
       return item;
@@ -43,12 +54,64 @@ export default function Return() {
 
   const handleChange = (id, key, value) => {
     const nextData = data.map((item) => {
-      if (item.id === id) {
+      if (item.itemId === id) {
         return { ...item, [key]: Number(value) };
       }
       return item;
     });
     setData(nextData);
+  };
+
+  const handleSave = async () => {
+    const eventItems = {
+      eventId: orderId,
+      items: data.map((item) => ({
+        itemId: item.itemId,
+        returned: item.returned,
+        damaged: item.damaged,
+      })),
+    };
+    console.log(eventItems);
+
+    try {
+      const response = await returnEventItems(eventItems);
+
+      if (response.error) {
+        console.log("Items returning failed", response);
+        Swal.fire({
+          title: "Oops...",
+          text:
+            response?.error?.data?.payload ||
+            response?.data?.payload ||
+            "Items returning failed",
+          icon: "error",
+        });
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        refetchReturnList();
+        Toast.fire({
+          icon: "success",
+          title: "Items Returned Successfully",
+        });
+        // navigate(`/home/orders/trackOrder/${orderId}/release`);
+      }
+    } catch (error) {
+      console.log("Items Adding Error", error);
+      Swal.fire({
+        title: "Error saving items",
+        icon: "error",
+      });
+    }
   };
 
   return (
@@ -58,22 +121,8 @@ export default function Return() {
           inside
           className="flex border-2 h-12 px-3 !rounded-2 items-center justify-evenly"
         >
-          <AutoComplete
-            placeholder="Search Items"
-            // data={data}
-            // value={value}
-            // onChange={handleSearchChange}
-            // onSelect={handleSelectUser}
-          />
+          <AutoComplete placeholder="Search Items" />
           <InputGroup.Addon>
-            {/* {value && (
-            <span
-              className="material-symbols-outlined sidebar-icon text-lg font-medium text-red cursor-pointer mr-5"
-              onClick={handleClearSearch}
-            >
-              close
-            </span>
-          )} */}
             <span className="material-symbols-outlined sidebar-icon text-lg font-medium text-txtdarkblue cursor-pointer">
               search
             </span>
@@ -126,7 +175,7 @@ export default function Return() {
           <Cell>
             {(rowData) => {
               const missing =
-                rowData.released - (rowData.returned + rowData.damaged);
+                rowData.quantity - (rowData.returned + rowData.damaged);
               return missing;
             }}
           </Cell>
@@ -136,7 +185,10 @@ export default function Return() {
           <HeaderCell>Action</HeaderCell>
           <Cell>
             {(rowData) => (
-              <div className="flex" onClick={() => handleEditState(rowData.id)}>
+              <div
+                className="flex"
+                onClick={() => handleEditState(rowData.itemId)}
+              >
                 {rowData.status === "EDIT" ? (
                   <span className="material-symbols-outlined sidebar-icon text-xl font-medium text-txtdarkblue cursor-pointer">
                     save_as
@@ -151,6 +203,14 @@ export default function Return() {
           </Cell>
         </Column>
       </Table>
+      <div className="flex justify-end mt-5">
+        <button
+          className="w-60 h-10 bg-txtdarkblue text-white p-4 text-lg flex items-center justify-center rounded-md"
+          onClick={handleSave}
+        >
+          Save
+        </button>
+      </div>
     </div>
   );
 }

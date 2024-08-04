@@ -25,7 +25,7 @@ const CheckCell = ({ rowData, onChange, checkedKeys, dataKey, ...props }) => (
   </Cell>
 );
 
-export default function Release() {
+export default function WashingTable() {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const { data: eventItems, refetch: eventItemsRefetch } =
@@ -118,8 +118,6 @@ export default function Release() {
   };
   return (
     <div className="w-full">
-      <p className="font-bold text-black text-2xl mb-5">Item Checklist</p>
-
       <Table height={300} data={data} id="table">
         <Column flexGrow={2} align="center">
           <HeaderCell style={{ padding: 0 }}>
