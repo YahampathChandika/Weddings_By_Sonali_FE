@@ -11,8 +11,13 @@ import { DateField } from "@mui/x-date-pickers/DateField";
 import Swal from "sweetalert2";
 import UserDetails from "../components/common/UserDetails";
 import { TimeField } from "@mui/x-date-pickers";
-import { useAddNewOrderMutation } from "../store/api/orderApi";
+import {
+  useAddNewOrderMutation,
+  useGetOrderMatricesQuery,
+  useGetOrdersByStateQuery,
+} from "../store/api/orderApi";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -29,7 +34,10 @@ const schema = yup.object().shape({
 
 export default function NewOrder() {
   const [newOrder] = useAddNewOrderMutation();
+  const { refetch: refetchOrderMatrices } = useGetOrderMatricesQuery();
+  const { refetch: refetchWaitingList } = useGetOrdersByStateQuery(1);
 
+  const navigate = useNavigate();
   const {
     handleSubmit,
     control,
@@ -67,6 +75,9 @@ export default function NewOrder() {
           icon: "success",
           title: "New Order Added Successfully",
         });
+        refetchOrderMatrices();
+        refetchWaitingList();
+        navigate("/home/orders");
       } else {
         console.log("Order adding failed", response);
         Swal.fire({

@@ -12,15 +12,15 @@ export default function Orders() {
   const { data: orderMatrices } = useGetOrderMatricesQuery();
   const [searchValue, setSearchValue] = useState("");
   const [orderType, setOrderType] = useState("waiting");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleClearSearch = () => {
     setSearchValue("");
   };
   
-  const ongoingOrdersCount = orderMatrices?.payload[0]?.eventCount;
-  const upcomingOrdersCount = orderMatrices?.payload[1]?.eventCount;
-  const waitingOrdersCount = orderMatrices?.payload[2]?.eventCount;
-  const pastOrdersCount = orderMatrices?.payload[3]?.eventCount;
+  const ongoingOrdersCount = orderMatrices?.payload?.ongoing;
+  const upcomingOrdersCount = orderMatrices?.payload?.upcoming;
+  const waitingOrdersCount = orderMatrices?.payload?.waiting;
+  const pastOrdersCount = orderMatrices?.payload?.past;
 
   const orderTypeMapping = {
     waiting: { icon: "calendar_clock", title: "Waiting Orders" },
@@ -92,31 +92,14 @@ export default function Orders() {
           >
             <Col>
               <p className="text-lg font-medium">Waiting</p>
-              <p className="text-xs text-txtgray">Orders</p>
-              <p className="text-2xl text-txtblue mt-3">0{waitingOrdersCount}</p>
+              <p className="text-xs text-txtgray">Add Items</p>
+              <p className="text-2xl text-txtblue mt-3">
+                0{waitingOrdersCount}
+              </p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
                 calendar_clock
-              </span>
-            </Col>
-          </Row>
-          <Row
-            onClick={() => setOrderType("ongoing")}
-            className={`bg-white w-1/5 h-28 rounded-md py-3 px-5 flex justify-between items-center cursor-pointer ${
-              orderType === "ongoing"
-                ? "scale-105 shadow-md"
-                : "hover:scale-105 hover:shadow-md"
-            } transform transition-transform duration-300`}
-          >
-            <Col>
-              <p className="text-lg font-medium">Ongoing</p>
-              <p className="text-xs text-txtgray">Orders</p>
-              <p className="text-2xl text-txtblue mt-3">0{ongoingOrdersCount}</p>
-            </Col>
-            <Col>
-              <span className="material-symbols-outlined text-4xl font-light text-txtblue">
-                event
               </span>
             </Col>
           </Row>
@@ -130,12 +113,35 @@ export default function Orders() {
           >
             <Col>
               <p className="text-lg font-medium">Upcoming</p>
-              <p className="text-xs text-txtgray">Orders</p>
-              <p className="text-2xl text-txtblue mt-3">0{upcomingOrdersCount}</p>
+              <p className="text-xs text-txtgray">Release Items</p>
+              <p className="text-2xl text-txtblue mt-3">
+                0{upcomingOrdersCount}
+              </p>
             </Col>
             <Col>
               <span className="material-symbols-outlined text-4xl font-light text-txtblue">
                 event_upcoming
+              </span>
+            </Col>
+          </Row>
+          <Row
+            onClick={() => setOrderType("ongoing")}
+            className={`bg-white w-1/5 h-28 rounded-md py-3 px-5 flex justify-between items-center cursor-pointer ${
+              orderType === "ongoing"
+                ? "scale-105 shadow-md"
+                : "hover:scale-105 hover:shadow-md"
+            } transform transition-transform duration-300`}
+          >
+            <Col>
+              <p className="text-lg font-medium">Ongoing</p>
+              <p className="text-xs text-txtgray">Return Items</p>
+              <p className="text-2xl text-txtblue mt-3">
+                0{ongoingOrdersCount}
+              </p>
+            </Col>
+            <Col>
+              <span className="material-symbols-outlined text-4xl font-light text-txtblue">
+                event
               </span>
             </Col>
           </Row>
@@ -149,7 +155,7 @@ export default function Orders() {
           >
             <Col>
               <p className="text-lg font-medium">Past</p>
-              <p className="text-xs text-txtgray">Orders</p>
+              <p className="text-xs text-txtgray">Finished Orders</p>
               <p className="text-2xl text-txtblue mt-3">0{pastOrdersCount}</p>
             </Col>
             <Col>

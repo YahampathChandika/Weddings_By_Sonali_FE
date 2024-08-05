@@ -6,7 +6,6 @@ import {
   useReleaseEventItemsMutation,
   useGetReturnItemsListQuery,
 } from "../../store/api/eventItemsApi";
-
 import Swal from "sweetalert2";
 
 const { Column, HeaderCell, Cell } = Table;
