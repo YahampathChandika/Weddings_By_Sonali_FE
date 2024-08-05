@@ -64,7 +64,7 @@ function InventoryTable({ Items }) {
         onSortColumn={handleSortColumn}
         loading={loading}
       >
-        <Column flexGrow={1} align="center" fixed sortable>
+        <Column flexGrow={1} align="center" fixed>
           <HeaderCell>#</HeaderCell>
           <Cell>
             {(rowData, rowIndex) => {
@@ -73,7 +73,7 @@ function InventoryTable({ Items }) {
           </Cell>
         </Column>
 
-        <Column flexGrow={2} align="center" fixed sortable>
+        <Column flexGrow={2} align="center" fixed >
           <HeaderCell>Code</HeaderCell>
           <Cell dataKey="code" />
         </Column>
@@ -83,7 +83,7 @@ function InventoryTable({ Items }) {
           <Cell dataKey="itemName" />
         </Column>
 
-        <Column flexGrow={4} sortable>
+        <Column flexGrow={3} sortable>
           <HeaderCell>Type</HeaderCell>
           <Cell dataKey="type" />
         </Column>
@@ -103,17 +103,17 @@ function InventoryTable({ Items }) {
           <Cell dataKey="availableunits" />
         </Column>
 
-        <Column flexGrow={2} sortable>
+        <Column flexGrow={2}>
           <HeaderCell>Damaged</HeaderCell>
           <Cell dataKey="damage" />
         </Column>
 
-        <Column flexGrow={2} sortable>
+        <Column flexGrow={2}>
           <HeaderCell>Missed</HeaderCell>
           <Cell dataKey="missing" />
         </Column>
 
-        <Column flexGrow={2} sortable>
+        <Column flexGrow={2}>
           <HeaderCell>Actions</HeaderCell>
           <Cell>
             <span className="material-symbols-outlined sidebar-icon text-lg font-medium text-txtdarkblue mr-3 cursor-pointer">

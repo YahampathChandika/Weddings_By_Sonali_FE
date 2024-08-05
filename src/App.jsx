@@ -34,7 +34,6 @@
 
 // export default App;
 
-
 import { Route, Routes } from "react-router-dom";
 import Home from "./components/common/Home";
 import Overview from "./pages/Overview";
@@ -67,7 +66,7 @@ function App() {
         </Route>
         <Route path="users" element={<Users />} />
         <Route path="inventory" element={<Inventory />} />
-        <Route path="washing" element={<Washing />} />
+        <Route path="washList" element={<Washing />} />
       </Route>
     </Routes>
   );

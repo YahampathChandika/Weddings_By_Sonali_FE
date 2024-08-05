@@ -44,6 +44,20 @@ export const eventItemsApi = api.injectEndpoints({
         };
       },
     }),
+
+    getWashlist: builder.query({
+      query: (eventId) => `eventItems/getWashlist/${eventId}`,
+    }),
+
+    markWashed: builder.mutation({
+      query: (data) => {
+        return {
+          url: "eventItems/markWashed",
+          method: "POST",
+          body: data,
+        };
+      },
+    }),
   }),
 });
 
@@ -54,4 +68,6 @@ export const {
   useReleaseEventItemsMutation,
   useGetReturnItemsListQuery,
   useReturnEventItemsMutation,
+  useGetWashlistQuery,
+  useMarkWashedMutation,
 } = eventItemsApi;

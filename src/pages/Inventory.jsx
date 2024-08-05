@@ -12,13 +12,7 @@ function Inventory() {
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false);
 
-  const {
-    data: getAllItems,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useGetAllItemsQuery();
+  const { data: getAllItems } = useGetAllItemsQuery();
 
   useEffect(() => {
     if (getAllItems?.payload) {
@@ -52,7 +46,7 @@ function Inventory() {
       </div>
       <div className="max-w-full h-20 bg-white rounded-md flex items-center justify-between mb-10">
         <div className="ml-8 w-1/2">
-          <p className="text-xl font-medium text-txtgray">20 items Total</p>
+          <p className="text-xl font-medium text-txtgray">0{filteredItems.length} Items Total</p>
         </div>
         <div className="flex w-1/2 justify-between">
           <div className="w-8/12">
@@ -61,7 +55,7 @@ function Inventory() {
               className="flex border-2 h-10 px-3 !rounded-full items-center justify-evenly"
             >
               <AutoComplete
-                placeholder="Search by Item ID or Name"
+                placeholder="Search by Item Name"
                 value={searchValue}
                 onChange={handleSearchChange}
               />
