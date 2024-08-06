@@ -1,33 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
+import moment from "moment";
+import { useGetOrdersByStateQuery } from "../../store/api/orderApi";
 
-export default function OverviewLineChart() {
-  const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-
-  const d = new Date();
-  let month1 = month[d.getMonth()-2];
-  let month2 = month[d.getMonth()-1];
-  const [series] = useState([
-    {
-      name: month1, 
-      data: [8,10,5,2],
-    },
-    {
-      name: month2, 
-      data: [4,3,9,7]
-    },
-  ]);
-
-  const [options] = useState({
+export default function OverviewBarChart() {
+  const { data: ordersData, error, isLoading } = useGetOrdersByStateQuery(4);
+  const [series, setSeries] = useState([]);
+  const [options, setOptions] = useState({
     chart: {
       height: 200,
-      type: "line",
+      type: "bar",
       zoom: {
-        enabled: false,
+        enabled: true,
+      },
+      toolbar: {
+        show: true,
       },
     },
     dataLabels: {
-      enabled: false,
+      enabled: true,
     },
     stroke: {
       curve: "straight",
@@ -39,24 +30,54 @@ export default function OverviewLineChart() {
       },
     },
     xaxis: {
-      categories: [
-        "Week 1",
-        "Week 2",
-        "Week 3",
-        "Week 4",
-      ],
+      categories: [],
     },
+
     markers: {
       size: 3,
-  },
+    },
     legend: {
       show: true,
-      position: 'top',
-      horizontalAlign: 'center'
+      position: "top",
+      horizontalAlign: "center",
     },
-    // colors: ["#FF4560", "#FEB019", "#00E396"], // Custom colors
-
   });
+
+  useEffect(() => {
+    if (ordersData && !isLoading && !error) {
+      // Initialize the data for the past 8 weeks
+      const currentDate = moment();
+      const weeks = [];
+      for (let i = 7; i >= 0; i--) {
+        weeks.push(currentDate.clone().subtract(i, "weeks").format("MMM-DD"));
+      }
+      const weeklyData = new Array(weeks.length).fill(0);
+
+      ordersData.payload.forEach((order) => {
+        const orderWeek = moment(order.createdAt).format("MMM-DD");
+        const index = weeks.indexOf(orderWeek);
+        if (index !== -1) {
+          weeklyData[index] += 1;
+        } else {
+          weeks.push(orderWeek);
+          weeklyData.push(1);
+        }
+      });
+
+      setOptions((prevOptions) => ({
+        ...prevOptions,
+        xaxis: {
+          ...prevOptions.xaxis,
+          categories: weeks,
+        },
+      }));
+
+      setSeries([{ data: weeklyData }]);
+    }
+  }, [ordersData, isLoading, error]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error fetching data</div>;
 
   return (
     <div>
@@ -65,7 +86,7 @@ export default function OverviewLineChart() {
           options={options}
           series={series}
           type="bar"
-          height={200} 
+          height={200}
         />
       </div>
       <div id="html-dist"></div>
