@@ -3,6 +3,7 @@ import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import "../../assets/css/Sidebar.css";
 import { useNavigate } from "react-router-dom";
 import LogoutModal from "../modals/Logout";
+import image from "../../assets/images/logo.png";
 
 function SidebarComp() {
   const [collapsed, setCollapsed] = useState(false);
@@ -35,10 +36,13 @@ function SidebarComp() {
         className="sidebar"
       >
         <Menu>
-          <p className="sidebar-title">
+          {/* <p className="sidebar-title">
             Weddings <br />
             By Sonali
-          </p>
+          </p> */}
+          <div className="flex items-center justify-center pt-5">
+            <img src={image} alt="Your Image" className="login-image w-36 " />
+          </div>
 
           {/* <div
             className="collapse-btn"

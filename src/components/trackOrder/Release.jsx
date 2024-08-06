@@ -107,8 +107,8 @@ export default function Release() {
         });
         eventItemsRefetch();
         returnItemsRefetch();
-        refetchOrderData();
         navigate(`/home/orders/trackOrder/${orderId}/return`);
+        refetchOrderData();
       }
     } catch (error) {
       console.log("Failed to release event items", error);
