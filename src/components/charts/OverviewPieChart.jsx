@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
-import { useGetAdmittedPatientsQuery } from "../../store/api/patientApi";
+import { useGetAllOrdersQuery } from "../../store/api/orderApi";
 
 export default function OverviewPieChart() {
-  const { data: patientData, isLoading, error } = useGetAdmittedPatientsQuery();
+  const { data: patientData, isLoading, error } = useGetAllOrdersQuery();
 
   const [chartData, setChartData] = useState({
     series: [],

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Col, Container, Row } from "rsuite";
 import OverviewLineChart from "../components/charts/OverviewLineChart";
 import OverviewPieChart from "../components/charts/OverviewPieChart";
-import OverviewTable from "../components/tables/OverviewTable";
 import { useGetSignedUserQuery } from "../store/api/userApi";
 import UserDetails from "../components/common/UserDetails";
 import {
@@ -85,7 +84,6 @@ export default function Overview() {
       <Row className="bg-white h-96 rounded-md mt-8 flex flex-col">
         <p className="text-lg p-5 font-medium">Orders</p>
         <div className="flex-grow">
-          {/* <OverviewTable /> */}
           <OngoingOrdersTable />
         </div>
       </Row>
