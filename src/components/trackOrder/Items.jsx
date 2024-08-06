@@ -9,6 +9,7 @@ import {
   useGetReleaseItemListQuery,
 } from "../../store/api/eventItemsApi";
 import { useNavigate, useParams } from "react-router-dom";
+import { useGetOrderByIdQuery } from "../../store/api/orderApi";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -72,8 +73,10 @@ export default function Items() {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const [value, setValue] = useState("");
-  const { data: eventItems, refetch: refetchEventItems } = useGetEventItemsByIdQuery(orderId);
+  const { data: eventItems, refetch: refetchEventItems } =
+    useGetEventItemsByIdQuery(orderId);
   const { refetch: refetchReleaseItems } = useGetReleaseItemListQuery(orderId);
+  const { refetch: refetchOrderData } = useGetOrderByIdQuery(orderId);
   const [data, setData] = useState([]);
   const { data: allItemsData } = useGetAllItemsQuery();
   const [addEventItems] = useAddEventItemsMutation();
@@ -208,6 +211,7 @@ export default function Items() {
         });
         refetchReleaseItems();
         refetchEventItems();
+        refetchOrderData();
         navigate(`/home/orders/trackOrder/${orderId}/release`);
       }
     } catch (error) {

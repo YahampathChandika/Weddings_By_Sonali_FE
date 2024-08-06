@@ -27,9 +27,9 @@ export default function Overview() {
   });
 
   const pastOrdersCount = thisMonthPastOrders?.length;
-  const ongoingOrdersCount = orderMatrices?.payload[0]?.eventCount;
-  const waitingOrdersCount = orderMatrices?.payload[1]?.eventCount;
-  const upcomingOrdersCount = orderMatrices?.payload[2]?.eventCount;
+  const ongoingOrdersCount = orderMatrices?.payload?.ongoing;
+  const waitingOrdersCount = orderMatrices?.payload?.waiting;
+  const upcomingOrdersCount = orderMatrices?.payload?.upcoming;
 
   return (
     <Container className="w-full">

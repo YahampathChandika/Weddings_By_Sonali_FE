@@ -7,6 +7,7 @@ import {
   useGetReturnItemsListQuery,
 } from "../../store/api/eventItemsApi";
 import Swal from "sweetalert2";
+import { useGetOrderByIdQuery } from "../../store/api/orderApi";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -30,6 +31,7 @@ export default function Release() {
   const { data: eventItems, refetch: eventItemsRefetch } =
     useGetReleaseItemListQuery(orderId);
   const { refetch: returnItemsRefetch } = useGetReturnItemsListQuery(orderId);
+  const { refetch: refetchOrderData } = useGetOrderByIdQuery(orderId);
   const [checkedKeys, setCheckedKeys] = useState([]);
   const [releaseEventItems] = useReleaseEventItemsMutation();
 
@@ -105,6 +107,7 @@ export default function Release() {
         });
         eventItemsRefetch();
         returnItemsRefetch();
+        refetchOrderData();
         navigate(`/home/orders/trackOrder/${orderId}/return`);
       }
     } catch (error) {

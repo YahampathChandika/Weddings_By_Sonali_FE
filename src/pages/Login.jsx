@@ -52,7 +52,7 @@ function Login() {
   };
 
   useEffect(() => {
-    document.title = "LogIn | Vital Care";
+    document.title = "LogIn | Weddings By Sonali";
   }, []);
 
   return (

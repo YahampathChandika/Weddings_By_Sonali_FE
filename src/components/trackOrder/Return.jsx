@@ -6,6 +6,7 @@ import {
   useReturnEventItemsMutation,
 } from "../../store/api/eventItemsApi";
 import Swal from "sweetalert2";
+import { useGetOrderByIdQuery } from "../../store/api/orderApi";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -33,6 +34,7 @@ export default function Return() {
   const { orderId } = useParams();
   const { data: returnItemsData, refetch: refetchReturnList } =
     useGetReturnItemsListQuery(orderId);
+  const { refetch: refetchOrderData } = useGetOrderByIdQuery(orderId);
   const returnItems = returnItemsData?.payload;
   const [data, setData] = useState([]);
 
@@ -99,6 +101,7 @@ export default function Return() {
           },
         });
         refetchReturnList();
+        refetchOrderData();
         Toast.fire({
           icon: "success",
           title: "Items Returned Successfully",
