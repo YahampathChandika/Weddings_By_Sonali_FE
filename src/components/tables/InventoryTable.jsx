@@ -105,7 +105,7 @@ function InventoryTable({ Items }) {
 
         <Column flexGrow={2}>
           <HeaderCell>Damaged</HeaderCell>
-          <Cell dataKey="damage" />
+          <Cell dataKey="damaged" />
         </Column>
 
         <Column flexGrow={2}>

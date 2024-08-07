@@ -77,7 +77,7 @@ export default function OverviewBarChart() {
   }, [ordersData, isLoading, error]);
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error fetching data</div>;
+  if (error) return <div className="w-full h-1/2 items-center flex justify-center">No Data To Display!</div>;
 
   return (
     <div>

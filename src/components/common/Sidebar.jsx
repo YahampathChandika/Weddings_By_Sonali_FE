@@ -36,13 +36,13 @@ function SidebarComp() {
         className="sidebar"
       >
         <Menu>
-          {/* <p className="sidebar-title">
+          <p className="sidebar-title">
             Weddings <br />
             By Sonali
-          </p> */}
-          <div className="flex items-center justify-center pt-5">
+          </p>
+          {/* <div className="flex items-center justify-center pt-5">
             <img src={image} alt="Your Image" className="login-image w-36 " />
-          </div>
+          </div> */}
 
           {/* <div
             className="collapse-btn"
