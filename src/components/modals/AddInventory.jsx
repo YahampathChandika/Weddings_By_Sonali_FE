@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import {
   useAddItemMutation,
   useGetAllItemsQuery,
+  useUpdateItemMutation,
 } from "../../store/api/inventoryApi";
 
 const schema = yup.object().shape({
@@ -17,64 +18,117 @@ const schema = yup.object().shape({
   itemCode: yup.string().required("Item code is required"),
 });
 
-export default function AddInventoryModal({ open, handleClose }) {
+export default function AddInventoryModal({ open, handleClose, item }) {
   const {
     handleSubmit,
     control,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const [addItem] = useAddItemMutation();
+  const [updateItem] = useUpdateItemMutation();
   const { refetch } = useGetAllItemsQuery();
+
+  useEffect(() => {
+    if (item) {
+      setValue("itemName", item.itemName);
+      setValue("itemType", item.type);
+      setValue("itemQuantity", item.quantity);
+      setValue("itemCode", item.code);
+      setValue("wash", item.wash === "1");
+    } else {
+      reset();
+    }
+  }, [item, setValue, reset]);
 
   const onSubmit = async (data) => {
     try {
-      const formattedData = {
+      const updatedData = {
+        ...data,
         itemName: data.itemName,
         type: data.itemType,
         quantity: parseInt(data.itemQuantity),
         code: data.itemCode,
         wash: data.wash ? "1" : "0",
       };
-      console.log("formattedData", formattedData);
 
-      const response = await addItem(formattedData);
-
-      if (response.data && !response.data.error) {
-        reset();
-        handleClose();
-        refetch();
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "success",
-          title: "Item Added Successfully",
-        });
+      if (item) {
+        const updateRes = await updateItem({ id: item.id, ...updatedData });
+        if (updateRes.data && !updateRes.data.error) {
+          reset();
+          handleClose();
+          refetch();
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "success",
+            title: "Item Updated Successfully",
+          });
+        } else {
+          console.log("Item updating failed", updateRes);
+          Swal.fire({
+            title: "Oops...",
+            text:
+              updateRes?.error?.data?.payload ||
+              updateRes?.data?.payload ||
+              "Item updating failed",
+            icon: "error",
+          });
+        }
       } else {
-        console.log("Item adding failed", response);
-        Swal.fire({
-          title: "Oops...",
-          text:
-            response?.error?.data?.payload ||
-            response?.data?.payload ||
-            "Item adding failed",
-          icon: "error",
-        });
+        const addRes = await addItem(updatedData);
+
+        if (addRes.data && !addRes.data.error) {
+          reset();
+          handleClose();
+          refetch();
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "success",
+            title: "Item Added Successfully",
+          });
+        } else {
+          console.log("Item adding failed", addRes);
+          Swal.fire({
+            title: "Oops...",
+            text:
+              addRes?.error?.data?.payload ||
+              addRes?.data?.payload ||
+              "Item adding failed",
+            icon: "error",
+          });
+        }
       }
     } catch (error) {
-      console.log("Item adding error", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "An error occurred while adding the item.",
+        icon: "error",
+      });
     }
   };
 
@@ -83,7 +137,9 @@ export default function AddInventoryModal({ open, handleClose }) {
       <Modal.Body className="!h-auto">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex justify-between items-center !h-16 mt-4 rounded-t-md px-10">
-            <p className="font-semibold text-2xl ">Add New Item</p>
+            <p className="font-semibold text-2xl ">
+              {item ? "Update Item" : "Add Inventory Item"}
+            </p>
             <div className="border-double border-4 text-txtblue border-slate-100 bg-white rounded-full h-12 w-12 items-center flex justify-center">
               <span className="material-symbols-outlined">inventory_2</span>
             </div>
@@ -94,7 +150,6 @@ export default function AddInventoryModal({ open, handleClose }) {
               <Controller
                 name="itemName"
                 control={control}
-                defaultValue=""
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -110,7 +165,6 @@ export default function AddInventoryModal({ open, handleClose }) {
               <Controller
                 name="itemQuantity"
                 control={control}
-                defaultValue=""
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -130,7 +184,6 @@ export default function AddInventoryModal({ open, handleClose }) {
               <Controller
                 name="itemType"
                 control={control}
-                defaultValue=""
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -146,7 +199,6 @@ export default function AddInventoryModal({ open, handleClose }) {
               <Controller
                 name="itemCode"
                 control={control}
-                defaultValue=""
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -165,14 +217,13 @@ export default function AddInventoryModal({ open, handleClose }) {
             <Controller
               name="wash"
               control={control}
-              defaultValue={false}
               render={({ field }) => (
                 <Checkbox
                   {...field}
                   checked={field.value}
                   onChange={(value, checked) => field.onChange(checked)}
                 >
-                  A Washable Item
+                  Requires Wash
                 </Checkbox>
               )}
             />
@@ -189,10 +240,10 @@ export default function AddInventoryModal({ open, handleClose }) {
               Cancel
             </button>
             <button
-              type="submit"
               className="w-1/2 h-10 rounded-md bg-blue-700 text-white hover:bg-blue-800 transition-all duration-300"
+              type="submit"
             >
-              Create
+              {item ? "Update Item" : "Add Item"}
             </button>
           </div>
         </form>

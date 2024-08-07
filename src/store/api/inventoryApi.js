@@ -20,8 +20,30 @@ export const inventoryApi = api.injectEndpoints({
     getItemById: builder.query({
       query: (itemId) => `item/getItemById/${itemId}`,
     }),
+
+    updateItem: builder.mutation({
+      query: (data) => {
+        return {
+          url: `item/updateItem/${data.id}`,
+          method: "PATCH",
+          body: data,
+        };
+      },
+    }),
+
+    deleteItem: builder.mutation({
+      query: (itemId) => ({
+        url: `item/deleteItem/${itemId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
-export const { useGetAllItemsQuery, useGetItemByIdQuery, useAddItemMutation } =
-  inventoryApi;
+export const {
+  useGetAllItemsQuery,
+  useGetItemByIdQuery,
+  useAddItemMutation,
+  useUpdateItemMutation,
+  useDeleteItemMutation,
+} = inventoryApi;
