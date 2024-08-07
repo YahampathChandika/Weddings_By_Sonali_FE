@@ -204,7 +204,7 @@ export default function Washing() {
 
           <Column flexGrow={2}>
             <HeaderCell>Quantity</HeaderCell>
-            <Cell dataKey="quantity" />
+            <Cell dataKey="returned" />
           </Column>
         </Table>
         <style jsx>{`
