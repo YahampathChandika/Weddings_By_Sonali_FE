@@ -11,6 +11,7 @@ function FailModal({
   id,
   deleteApi,
   refetchTable,
+  otherRefetch,
 }) {
   const handleDelete = async () => {
     try {
@@ -40,6 +41,7 @@ function FailModal({
           title: response?.data?.payload,
         });
         await refetchTable();
+        await otherRefetch();
         handleClose();
       }
     } catch {
@@ -58,9 +60,7 @@ function FailModal({
         </div>
         <Divider className="text-txtgray !mt-2 w-11/12 !mx-auto" />
         <div className="px-10">
-          <p className="text-txtgray font-medium text-lg my-3">
-            {bodytxt}
-          </p>
+          <p className="text-txtgray font-medium text-lg my-3">{bodytxt}</p>
         </div>
         <div className="w-full flex justify-between mt-6 mb-4 px-10">
           <button
