@@ -9,6 +9,7 @@ import {
   useGetOrdersByStateQuery,
 } from "../store/api/orderApi";
 import OngoingOrdersTable from "../components/tables/OngoingOrdersTable";
+import WaitingOrdersTable from "../components/tables/WaitingOrdersTable";
 
 export default function Overview() {
   const { data: orderMatrices } = useGetOrderMatricesQuery();
@@ -84,7 +85,8 @@ export default function Overview() {
       <Row className="bg-white h-96 rounded-md mt-8 flex flex-col">
         <p className="text-lg p-5 font-medium">Orders</p>
         <div className="flex-grow">
-          <OngoingOrdersTable />
+          {/* <OngoingOrdersTable /> */}
+          <WaitingOrdersTable />
         </div>
       </Row>
     </Container>

@@ -97,7 +97,7 @@ function SidebarComp() {
               }
               onClick={() => handleMenuItemClick("orders")}
             >
-              Waiting List
+              Orders
             </MenuItem>
           </div>
           <div className="sidebar-link">
