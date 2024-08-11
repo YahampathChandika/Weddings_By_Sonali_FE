@@ -41,7 +41,9 @@ function FailModal({
           title: response?.data?.payload,
         });
         await refetchTable();
-        await otherRefetch();
+        if (otherRefetch) {
+          await otherRefetch();
+        }
         handleClose();
       }
     } catch {

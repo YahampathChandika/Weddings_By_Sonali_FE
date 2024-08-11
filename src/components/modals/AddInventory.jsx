@@ -11,14 +11,20 @@ import {
   useUpdateItemMutation,
 } from "../../store/api/inventoryApi";
 
-const schema = yup.object().shape({
-  itemName: yup.string().required("Item name is required"),
-  itemType: yup.string().required("Item type is required"),
-  itemQuantity: yup.string().required("Item quantity is required"),
-  itemCode: yup.string().required("Item code is required"),
-});
-
 export default function AddInventoryModal({ open, handleClose, item }) {
+  const schema = yup.object().shape({
+    itemName: yup.string().required("Item name is required"),
+    itemType: yup.string().required("Item type is required"),
+    itemQuantity: yup.string().required("Item quantity is required"),
+    itemCode: yup.string().required("Item code is required"),
+    ...(item && {
+      itemAvailable: yup.string().required("Items Available is required"),
+      itemUsage: yup.string().required("Item Usage is required"),
+      itemDamaged: yup.string().required("Items Damaged is required"),
+      itemMissing: yup.string().required("Items Missing is required"),
+    }),
+  });
+
   const {
     handleSubmit,
     control,
@@ -39,6 +45,10 @@ export default function AddInventoryModal({ open, handleClose, item }) {
       setValue("itemType", item.type);
       setValue("itemQuantity", item.quantity);
       setValue("itemCode", item.code);
+      setValue("itemAvailable", item.availableunits);
+      setValue("itemUsage", item.usedTimes);
+      setValue("itemDamaged", item.damaged);
+      setValue("itemMissing", item.missing);
       setValue("wash", item.wash === "1");
     } else {
       reset();
@@ -52,6 +62,10 @@ export default function AddInventoryModal({ open, handleClose, item }) {
         itemName: data.itemName,
         type: data.itemType,
         quantity: parseInt(data.itemQuantity),
+        availableunits: item ? parseInt(data.itemAvailable) : null,
+        usedTimes: item ? parseInt(data.itemUsage) : null,
+        damaged: item ? parseInt(data.itemDamaged) : 0,
+        missing: item ? parseInt(data.itemMissing) : null,
         code: data.itemCode,
         wash: data.wash ? "1" : "0",
       };
@@ -179,6 +193,46 @@ export default function AddInventoryModal({ open, handleClose, item }) {
                   />
                 )}
               />
+              {item && (
+                <>
+                  <Controller
+                    name="itemAvailable"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        id="outlined-basic"
+                        label="Item Available"
+                        variant="outlined"
+                        className="!mb-5 w-full"
+                        error={!!errors.itemAvailable}
+                        helperText={
+                          errors.itemAvailable
+                            ? errors.itemAvailable.message
+                            : ""
+                        }
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="itemUsage"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        id="outlined-basic"
+                        label="Item Usage"
+                        variant="outlined"
+                        className="!mb-5 w-full"
+                        error={!!errors.itemUsage}
+                        helperText={
+                          errors.itemUsage ? errors.itemUsage.message : ""
+                        }
+                      />
+                    )}
+                  />
+                </>
+              )}
             </div>
             <div className="flex-col w-1/2 text-right">
               <Controller
@@ -211,6 +265,44 @@ export default function AddInventoryModal({ open, handleClose, item }) {
                   />
                 )}
               />
+              {item && (
+                <>
+                  <Controller
+                    name="itemDamaged"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        id="outlined-basic"
+                        label="Item Damaged"
+                        variant="outlined"
+                        className="!mb-5 w-full"
+                        error={!!errors.itemDamaged}
+                        helperText={
+                          errors.itemDamaged ? errors.itemDamaged.message : ""
+                        }
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="itemMissing"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        id="outlined-basic"
+                        label="Item Missing"
+                        variant="outlined"
+                        className="!mb-5 w-full"
+                        error={!!errors.itemMissing}
+                        helperText={
+                          errors.itemMissing ? errors.itemMissing.message : ""
+                        }
+                      />
+                    )}
+                  />
+                </>
+              )}
             </div>
           </div>
           <div className="flex w-full px-10">
