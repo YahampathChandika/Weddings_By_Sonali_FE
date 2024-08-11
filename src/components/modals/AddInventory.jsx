@@ -141,7 +141,6 @@ export default function AddInventoryModal({ open, handleClose, item }) {
         icon: "error",
         title: "Error!",
         text: "An error occurred while adding the item.",
-        icon: "error",
       });
     }
   };
