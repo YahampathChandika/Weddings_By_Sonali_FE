@@ -36,7 +36,7 @@ function Login() {
         });
         Toast.fire({
           icon: "success",
-          title: "Welcome to VitalCare!",
+          title: "Welcome to Weddings By Sonali!",
         });
       } else {
         console.log("Login Error", response);

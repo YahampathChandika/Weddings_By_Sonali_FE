@@ -10,7 +10,7 @@
 //   return (
 //     <div className="w-full">
 //       <div className="flex justify-between items-center">
-//         <p className="font-bold text-black text-2xl">Order Details</p>
+//         <p className="font-bold text-black text-2xl">Event Details</p>
 //         <span class="material-symbols-outlined rounded-full h-12 w-12 flex justify-center items-center cursor-pointer text-black bg-bggray">
 //           edit
 //         </span>
@@ -83,7 +83,7 @@ export default function Details() {
   return (
     <div className="w-full">
       <div className="flex justify-between items-center">
-        <p className="font-bold text-black text-2xl">Order Details</p>
+        <p className="font-bold text-black text-2xl">Event Details</p>
         <span className="material-symbols-outlined rounded-full h-12 w-12 flex justify-center items-center cursor-pointer text-black bg-bggray">
           edit
         </span>

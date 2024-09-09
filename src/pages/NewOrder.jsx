@@ -73,24 +73,24 @@ export default function NewOrder() {
         });
         Toast.fire({
           icon: "success",
-          title: "New Order Added Successfully",
+          title: "New Event Added Successfully",
         });
         refetchOrderMatrices();
         refetchWaitingList();
         navigate("/home/orders");
       } else {
-        console.log("Order adding failed", response);
+        console.log("Event adding failed", response);
         Swal.fire({
           title: "Oops...",
           text:
             response?.error?.data?.payload ||
             response?.data?.payload ||
-            "Order adding failed",
+            "Event adding failed",
           icon: "error",
         });
       }
     } catch (error) {
-      console.log("Order Adding Error", error);
+      console.log("Event Adding Error", error);
     }
   };
 
@@ -101,7 +101,7 @@ export default function NewOrder() {
           <span className="material-symbols-outlined sidebar-icon text-black">
             add_box
           </span>
-          <p className="text-2xl font-bold ml-4 text-black">New Order</p>
+          <p className="text-2xl font-bold ml-4 text-black">New Event</p>
         </div>
         <UserDetails />
       </div>

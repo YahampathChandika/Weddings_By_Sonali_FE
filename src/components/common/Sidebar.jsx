@@ -82,7 +82,7 @@ function SidebarComp() {
               }
               onClick={() => handleMenuItemClick("newOrder")}
             >
-              New Order
+              New Event
             </MenuItem>
           </div>
           <div className="sidebar-link">
@@ -97,7 +97,7 @@ function SidebarComp() {
               }
               onClick={() => handleMenuItemClick("orders")}
             >
-              Orders
+              Events
             </MenuItem>
           </div>
           <div className="sidebar-link">

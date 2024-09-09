@@ -77,7 +77,7 @@ export default function Orders() {
               add_circle
             </span>
             <p className="text-lg font-medium text-txtdarkblue">
-              Add New Order
+              Add New Event
             </p>
           </Row>
         </Row>
@@ -155,7 +155,7 @@ export default function Orders() {
           >
             <Col>
               <p className="text-lg font-medium">Past</p>
-              <p className="text-xs text-txtgray">Finished Orders</p>
+              <p className="text-xs text-txtgray">Finished Events</p>
               <p className="text-2xl text-txtblue mt-3">0{pastOrdersCount}</p>
             </Col>
             <Col>

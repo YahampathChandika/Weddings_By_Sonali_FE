@@ -49,20 +49,20 @@ export default function Overview() {
       <Row className="flex">
         <Col className="mr-8 w-2/12">
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
-            <p className="text-lg font-medium">New Orders</p>
+            <p className="text-lg font-medium">New Event</p>
             <p className="text-xs text-txtgray">This month</p>
             <p className="text-2xl text-txtblue mt-3">0{waitingOrdersCount}</p>
           </Row>
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 mt-8 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
             <p className="text-lg font-medium">Ongoing</p>
-            <p className="text-xs text-txtgray">Orders</p>
+            <p className="text-xs text-txtgray">Events</p>
             <p className="text-2xl text-txtblue mt-3">0{ongoingOrdersCount}</p>
           </Row>
         </Col>
         <Col className="mr-8 w-2/12">
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
             <p className="text-lg font-medium">Upcoming</p>
-            <p className="text-xs text-txtgray">Orders</p>
+            <p className="text-xs text-txtgray">Events</p>
             <p className="text-2xl text-txtblue mt-3">0{upcomingOrdersCount}</p>
           </Row>
           <Row className="bg-white h-28 rounded-md pt-3 pl-5 mt-8 transform transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-pointer">
@@ -83,7 +83,7 @@ export default function Overview() {
       </Row>
 
       <Row className="bg-white h-96 rounded-md mt-8 flex flex-col">
-        <p className="text-lg p-5 font-medium">Orders</p>
+        <p className="text-lg p-5 font-medium">Events</p>
         <div className="flex-grow">
           {/* <OngoingOrdersTable /> */}
           <WaitingOrdersTable />

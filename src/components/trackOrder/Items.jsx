@@ -81,7 +81,7 @@ export default function Items() {
   const { data: allItemsData } = useGetAllItemsQuery();
   const [addEventItems] = useAddEventItemsMutation();
   const allItems = allItemsData?.payload?.map((item) => {
-    return `${item.id} | ${item.itemName} | ${item.availableunits}`;
+    return `${item.code} | ${item.itemName} | ${item.availableunits}`;
   });
 
   useEffect(() => {
@@ -107,7 +107,7 @@ export default function Items() {
   const handleSelectItem = (selectedItem) => {
     const selectedItemId = selectedItem.split(" | ")[0];
     const selectedItemData = allItemsData.payload.find(
-      (item) => item.id.toString() === selectedItemId
+      (item) => item.code.toString() === selectedItemId
     );
 
     if (!selectedItemData) {
@@ -116,7 +116,7 @@ export default function Items() {
 
     // Check if the item is already in the data array
     const itemExists = data.some(
-      (item) => item.id.toString() === selectedItemId
+      (item) => item.code.toString() === selectedItemId
     );
 
     if (itemExists) {
@@ -231,7 +231,7 @@ export default function Items() {
           className="flex border-2 h-12 px-3 !rounded-2 items-center justify-evenly"
         >
           <AutoComplete
-            placeholder="Search Items"
+            placeholder="Search Items by Code or Name"
             data={allItems}
             value={value}
             onChange={handleSearchChange}
@@ -254,7 +254,8 @@ export default function Items() {
       </div>
 
       <Table
-        height={420}
+        autoHeight
+        height={340}
         data={data}
         rowHeight={55}
         renderEmpty={() => (
@@ -315,12 +316,9 @@ export default function Items() {
           />
         </Column>
       </Table>
-      <div className="flex justify-end space-x-10">
-        <button className="w-48 h-10 bg-green text-white p-4 text-lg flex items-center justify-center  rounded-md">
-          PDF
-        </button>
+      <div className="flex justify-end mt-10">
         <button
-          className="w-48 h-10 bg-txtdarkblue text-white p-4 text-lg flex items-center justify-center  rounded-md"
+          className="w-60 h-10 bg-txtdarkblue text-white p-4 text-lg flex items-center justify-center rounded-md"
           onClick={handleSave}
         >
           Save
