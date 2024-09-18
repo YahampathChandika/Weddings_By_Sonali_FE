@@ -125,7 +125,7 @@ export default function TrackOrder() {
             className="flex border-2 h-10 px-3 !rounded-full items-center justify-evenly"
           >
             <AutoComplete
-              placeholder="Search by Order ID or Name"
+              placeholder="Search by Event ID or Name"
               data={allOrders}
               value={value}
               onChange={handleSearchChange}
